@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <title>
+        Fetch Data
+    </title>
+</head>
+<body>
+    <center>
+        <h1>DATA</h1>
+        <hr/>
+        <table border="1">
+            <tr>
+                <th>Employee ID</th>
+                <th>Employee Name</th>
+                <th>Employee email</th>
+            </tr>
+            {% for result in dataval%}
+            <tr>
+                <td>{{result.empid}}</td>
+                <td>{{result.empname}}</td>
+                <td>{{result.email}}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        <a href="{% url 'pdf_download' name='index' %}" class="btn btn-primary mt-4">PDF Download</a>
+        </form>
+    </center>
+</body>
+</html>
