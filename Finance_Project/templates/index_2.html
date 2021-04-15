@@ -23,7 +23,7 @@
 	
 	<div class="container-scroller">
 		<!-- Add Popup -->
-		<div class="pro-banner" id="pro-banner">
+		<!-- <div class="pro-banner" id="pro-banner">
 			<div class="card pro-banner-bg border-0 rounded-0">
 				<div class="card-body py-3 px-4 d-flex align-items-center justify-content-between flex-wrap">
 					<p class="mb-0 text-white font-weight-medium mb-2 mb-lg-0 mb-xl-0">Like what you see? Checkout our
@@ -39,7 +39,7 @@
 					</div>
 				</div>
 			</div>
-		</div>
+		</div>-->
 		<!-- Add popup ends -->
 
 		<!-- partial:partials/_horizontal-navbar.html -->
@@ -317,7 +317,7 @@
 						<div class="col-sm-6 mb-4 mb-xl-0">
 							<div class="d-lg-flex align-items-center">
 								<div>
-									<h3 class="text-dark font-weight-bold mb-2">Hi Zeel, welcome back!</h3>
+									<h3 class="text-dark font-weight-bold mb-2" id="UserDisplay"></h3>
 									<h6 class="font-weight-normal mb-2">Last login was 23 hours ago. View details</h6>
 								</div>
 								<!-- <div class="ml-lg-5 d-lg-flex d-none">
@@ -370,10 +370,10 @@
 											<div class="row">
 												<div class="col-sm-4">
 													<ul class="graphl-legend-rectangle">
-														<li><span class="bg-danger"></span>Jay</li>
-														<li><span class="bg-warning"></span>Hates</li>
-														<li><span class="bg-info"></span>Anupama</li>
-														<li><span class="bg-success"></span>Nair</li>
+														<li id="Exp1"><span class="bg-danger" ></span></li>
+														<li id="Exp2"><span class="bg-warning" ></span></li>
+														<li id="Exp3"><span class="bg-info"></span></li>
+														<li id="Exp4"><span class="bg-success"></span></li>
 													</ul>
 												</div>
 												<div class="col-sm-8 grid-margin">
@@ -389,27 +389,27 @@
 											<div class="row">
 												<div class="col-sm-12">
 													<div class="progress progress-lg grouped mb-2">
-														<div class="progress-bar  bg-danger" role="progressbar"
-															style="width: 40%" aria-valuenow="25" aria-valuemin="0"
+														<div class="progress-bar  bg-danger" role="progressbar"  id="Incbar1"
+															aria-valuenow="25" aria-valuemin="0"
 															aria-valuemax="100"></div>
-														<div class="progress-bar bg-info" role="progressbar"
-															style="width: 10%" aria-valuenow="50" aria-valuemin="0"
+														<div class="progress-bar bg-info" role="progressbar"  id="Incbar2"
+															aria-valuenow="50" aria-valuemin="0"
 															aria-valuemax="100"></div>
-														<div class="progress-bar bg-warning" role="progressbar"
-															style="width: 20%" aria-valuenow="50" aria-valuemin="0"
+														<div class="progress-bar bg-warning" role="progressbar"  id="Incbar3"
+															aria-valuenow="50" aria-valuemin="0"
 															aria-valuemax="100"></div>
-														<div class="progress-bar bg-success" role="progressbar"
-															style="width: 30%" aria-valuenow="50" aria-valuemin="0"
+														<div class="progress-bar bg-success" role="progressbar"  id="Incbar4"
+															aria-valuenow="50" aria-valuemin="0"
 															aria-valuemax="100"></div>
 													</div>
 												</div>
 												<div class="col-sm-12">
 													<ul class="graphl-legend-rectangle">
-														<li><span class="bg-danger"></span>Instagram (40%)</li>
-														<li><span class="bg-info"></span>Website (15%)</li>
-														<li><span class="bg-warning"></span>Facebook (20%)</li>
+														<li id="Inc1"><span class="bg-danger"></span></li>
+														<li id="Inc2"><span class="bg-info"></span></li>
+														<li id="Inc3"><span class="bg-warning"></span></li>
 													
-														<li><span class="bg-success"></span>Youtube (25%)</li>
+														<li id="Inc4"><span class="bg-success"></span></li>
 													</ul>
 												</div>
 											</div>
@@ -825,6 +825,11 @@
 // var endpoint = $("#salesDifference").attr("data-url");
 var x1=new Array(5);
 var x2=new Array(5);
+var labels_exp=new Array(4);
+var data_exp=new Array(4);
+var labels_inc=new Array(4);
+var data_inc=new Array(4);
+
 var i=0;
 var j=0;
 (function($) {
@@ -849,13 +854,66 @@ var j=0;
 			
 	// 		console.log(data[x]);
 	// }
-
-		x1=data["data"];
-     	x2=data["labels"];
+		var user=document.getElementById("UserDisplay");
+		user.innerHTML += 'Hi '+data["current_user"]+', welcome back!';
+		// document.getElementById("myURL").name = "dashboard";
+		x1=data["data_goals"];
+     	x2=data["labels_goals"];
 		console.log(x1);
 		console.log(x2);
 		// console.log(temp1);
 		// console.log(temp2);
+
+		// Expenses start 
+		labels_exp=data["labels_exp"];
+		data_exp=data["data_exp"];
+		
+		var exp1=document.getElementById("Exp1");
+		exp1.innerHTML += labels_exp[0];
+		
+		var exp2=document.getElementById("Exp2");
+		exp2.innerHTML += labels_exp[1];
+		
+		var exp3=document.getElementById("Exp3");
+		exp3.innerHTML += labels_exp[2];
+
+		var exp4=document.getElementById("Exp4");
+		exp4.innerHTML += labels_exp[3];
+
+		// Expenses end
+
+
+		// Income start 
+		labels_inc=data["labels_inc"];
+		data_inc=data["data_inc"];
+		
+		var inc1=document.getElementById("Inc1");
+		inc1.innerHTML += labels_inc[0] + ' ('+data_inc[0]+'%)';
+		
+		var inc2=document.getElementById("Inc2");
+		inc2.innerHTML += labels_inc[1] + ' ('+data_inc[1]+'%)';
+		
+		var inc3=document.getElementById("Inc3");
+		inc3.innerHTML += labels_inc[2] + ' ('+data_inc[2]+'%)';
+
+		var inc4=document.getElementById("Inc4");
+		inc4.innerHTML += labels_inc[3] + ' ('+data_inc[3]+'%)';
+		
+		// Chart of income
+		var incb1=document.getElementById("Incbar1");
+		incb1.style = "width: " +data_inc[0]+'%';
+		
+		var incb2=document.getElementById("Incbar2");
+		incb2.style = "width: " +data_inc[1]+'%';
+		
+		var incb3=document.getElementById("Incbar3");
+		incb3.style = "width: " +data_inc[2]+'%';
+
+		var incb4=document.getElementById("Incbar4");
+		incb4.style = "width: " +data_inc[3]+'%';
+
+		// style="width: 30%" 
+		// Income end 
 		var salesDifferencedata = {
 			// labels: ["Marriage", "New-car", "Property", "Leh-ladakh trip", "Charity"],
 			labels: x2,
@@ -935,7 +993,7 @@ var j=0;
 		}
 		var bestSellersData = {
 			datasets: [{
-				data: [20, 15, 20, 35],
+				data: data_exp,
 				backgroundColor: [
 					'#ee5b5b',
 					'#fcd53b',
@@ -953,11 +1011,7 @@ var j=0;
 				],
 			}],
 			// These labels appear in the legend and in the tooltips when hovering different arcs
-			labels: [
-				'A',
-				'B',
-				'C',
-				'D']
+			labels: labels_exp
 		};
 		var bestSellersOptions = {
 			responsive: true,
@@ -2009,10 +2063,7 @@ var j=0;
 		});
 		$("#productorder-gage").append('<div class="product-order"><div class="icon-inside-circle"><i class="mdi mdi-basket"></i></div></div>');
 
-		// Remove pro banner on close
-    document.querySelector('#bannerClose').addEventListener('click',function() {
-			$('#pro-banner').slideUp();
-    });
+		
 	});
 })(jQuery);
 

@@ -1,10 +1,12 @@
 from django.shortcuts import render
 from login.models import Employee
 from login.models import SignUp_details
+from Finance_Project.models import Goals,expense,income
 from django.contrib import messages
 import json
+from django.db.models import Sum
 
-
+from heapq import nlargest
 from django.http import HttpResponse
 
 #Import models of login after creation
@@ -42,10 +44,133 @@ def UserLogin(request):
         if SignUp_details.objects.filter(user_name=uname_given,password=upass_given) :
         #if True:
             messages.success(request,'Login successfully')
+            U_id = SignUp_details.objects.get(user_name=uname_given).user_id
+
+            # Goal chart and calculations
+            user_goals_details=Goals.objects.filter(user_id=U_id,Active=True)
+            user_goals_names=[]
+            user_goals_perc=[]
+            temp_dict={}
+            for x in user_goals_details:
+                save=int(x.amount_till_now)*100 /int(x.Amount_to_save)
+                temp_dict[x.Goal_name]=round(save,2)
+                # user_goals_perc.append(round(save,2))
+                # user_goals_names.append(x.Goal_name)
+                # print(x.Goal_id)
+            print(U_id)
+
+
+            # for x in temp_dict:
+            #     print(str(x)+':'+str(temp_dict[x]))
+
+            if len(temp_dict)<=5:
+                res = nlargest(len(temp_dict), temp_dict, key = temp_dict.get)
+                # print("Here 1")
+            else:
+                res = nlargest(5, temp_dict, key = temp_dict.get)
+                # print("Here 2")
+
+            for i in res: 
+                user_goals_names.append(i)
+                user_goals_perc.append(temp_dict[i])
+            # for x in user_goals_names:
+            #     print(x)
+            # for x in user_goals_perc:
+            #     print(x)
+
+
+            # Expenses and calculations
+            user_expenses_details=expense.objects.filter(user_id=U_id)
+            user_expenses_names=[]
+            user_expenses_perc=[]
+            temp_dict_exp={}
+            total_exp=expense.objects.filter(user_id=U_id).aggregate(Sum('Amount'))['Amount__sum']
+            for x in user_expenses_details:
+                exp_per=int(x.Amount)*100 /int(total_exp)
+                temp_dict_exp[x.Type]=round(exp_per,2)
+                
+            for x in temp_dict_exp:
+                print(str(x)+':'+str(temp_dict_exp[x]))
+
+
+            if len(temp_dict_exp)<=3:
+                res = nlargest(len(temp_dict_exp), temp_dict_exp, key = temp_dict_exp.get)
+                # print("Here 1 exp")
+            else:
+                res = nlargest(3, temp_dict_exp, key = temp_dict_exp.get)
+                # print("Here 2 exp")
+
+            for i in res: 
+                user_expenses_names.append(i)
+                user_expenses_perc.append(temp_dict_exp[i])
+
+            others_exp=0
+            for j in temp_dict_exp:
+                if j not in res:
+                    others_exp+=temp_dict_exp[j]
+
+            # print(others_exp)
+            user_expenses_names.append("Miscellaneous")
+            user_expenses_perc.append(others_exp)
+
+            # for x in user_expenses_names:
+            #     print(x)
+            # for x in user_expenses_perc:
+            #     print(x)
+
+
+
+
+            # Incomes and calculations
+            user_inc_details=income.objects.filter(user_id=U_id)
+            user_inc_names=[]
+            user_inc_perc=[]
+            temp_dict_inc={}
+            total_inc=income.objects.filter(user_id=U_id).aggregate(Sum('Amount'))['Amount__sum']
+            for x in user_inc_details:
+                inc_per=int(x.Amount)*100 /int(total_inc)
+                temp_dict_inc[x.Type]=round(inc_per,2)
+                
+            for x in temp_dict_inc:
+                print(str(x)+':'+str(temp_dict_inc[x]))
+
+
+            if len(temp_dict_inc)<=3:
+                res_inc = nlargest(len(temp_dict_inc), temp_dict_inc, key = temp_dict_inc.get)
+                # print("Here 1 exp")
+            else:
+                res_inc = nlargest(3, temp_dict_inc, key = temp_dict_inc.get)
+                # print("Here 2 exp")
+
+            for i in res_inc: 
+                user_inc_names.append(i)
+                user_inc_perc.append(temp_dict_inc[i])
+
+            others_inc=0
+            for j in temp_dict_inc:
+                if j not in res_inc:
+                    others_inc+=temp_dict_inc[j]
+
+            # print(others_exp)
+            user_inc_names.append("Miscellaneous")
+            user_inc_perc.append(round(others_inc,2))
+
+            for x in user_inc_names:
+                print(x)
+            for x in user_inc_perc:
+                print(x)
+
             results2={
-            "data":[25,15,25,35,45],
-            "labels":["Marriage", "New-car", "Property", "Leh-ladakh trip", "Charity"]
+            "data_goals":user_goals_perc,
+            "labels_goals":user_goals_names,
+            "data_exp":user_expenses_perc,
+            "labels_exp":user_expenses_names,
+            "data_inc":user_inc_perc,
+            "labels_inc":user_inc_names,
+            "current_user":uname_given,
+            "current_user_id":U_id
             }
+            
             results2_JSON=json.dumps(results2)
             return render(request,'index_2.html',{"dataval":results2_JSON})
         else:
