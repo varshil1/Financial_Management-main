@@ -18,11 +18,16 @@ from django.conf.urls import url
 from login import views as v1
 from statement import views as v2
 from statement.views import GeneratePdf
+from Expense import views as v_exp
+from Income import views as v_inc 
 
 urlpatterns = [
     url('admin/', admin.site.urls),
     url(r'^$',v1.UserLogin,name='index'),
     url('statement',v2.showdata,name='statement'),
+    url('addExpense',v_exp.AddExpense,name='addExpense'),
+    url('viewExpense',v_exp.showExpense,name='viewExpense'),
+    url('addIncome',v_inc.AddIncome,name='addIncome'),
     path('ajax/getData',v1.getData,name='getData'),
     path('pdf_download/<name>/', GeneratePdf.as_view(template_name='log.html') , name='pdf_download'),
 ]

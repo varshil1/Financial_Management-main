@@ -234,7 +234,7 @@
 							</a>
 							<div class="submenu">
 								<ul>
-									<li class="nav-item"><a class="nav-link" href="{% static "pages/Income/addIncome.html" %}">Add
+									<li class="nav-item"><a class="nav-link" href="{% url 'addIncome' %}">Add
 											Income</a></li>
 									<!-- <li class="nav-item"><a class="nav-link" href="pages/ui-features/typography.html">View Income</a></li> -->
 									<li class="nav-item"><a class="nav-link"
@@ -251,9 +251,9 @@
 							</a>
 							<div class="submenu">
 								<ul>
-									<li class="nav-item"><a class="nav-link" href="#">Add Expense</a></li>
+									<li class="nav-item"><a class="nav-link" href="{% url 'addExpense' %}">Add Expense</a></li>
 									<!-- <li class="nav-item"><a class="nav-link" href="#">View Expense</a></li> -->
-									<li class="nav-item"><a class="nav-link" href="#">View Expense Statement</a></li>
+									<li class="nav-item"><a class="nav-link" href="{% url 'viewExpense' %}">View Expense Statement</a></li>
 
 								</ul>
 							</div>
@@ -444,12 +444,12 @@
 									<div class="card bg-primary">
 										<div class="card-body text-white">
 											<h2 class="text-dark mb-2 font-weight-bold">
-												<span style='font-family:Arial; color: white;'>&#8377;1800</span>
+												<span id='tot_bal' style='font-family:Arial; color: white;'>&#8377;</span>
 
 											</h2>
 											<div class="progress mb-3">
 												<div class="progress-bar  bg-warning" role="progressbar"
-													style="width: 40%" aria-valuenow="25" aria-valuemin="0"
+													id='total_acc_progress_bar' aria-valuenow="25" aria-valuemin="0"
 													aria-valuemax="100"></div>
 											</div>
 											<h4 class="card-title mb-2" style="color: white;">
@@ -463,8 +463,8 @@
 								<div class="col-lg-4 d-flex grid-margin stretch-card">
 									<div class="card sale-diffrence-border">
 										<div class="card-body">
-											<h2 class="text-dark mb-2 font-weight-bold"><span
-													style='font-family:Arial;'>&#8377;</span>6475</h2>
+											<h2 id='tot_inc' class="text-dark mb-2 font-weight-bold"><span
+													style='font-family:Arial;'>&#8377;</span></h2>
 											<h4 class="card-title mb-2">Your Income</h4>
 											<small class="text-muted">APRIL 2019</small>
 										</div>
@@ -474,8 +474,8 @@
 								<div class="col-lg-4 d-flex grid-margin stretch-card">
 									<div class="card sale-visit-statistics-border">
 										<div class="card-body">
-											<h2 class="text-dark mb-2 font-weight-bold"><span
-													style='font-family:Arial;'>&#8377;</span>3479</h2>
+											<h2 id='tot_exp' class="text-dark mb-2 font-weight-bold"><span
+													style='font-family:Arial;'>&#8377;</span></h2>
 											<h4 class="card-title mb-2">Your Expense</h4>
 											<small class="text-muted">APRIL 2019</small>
 										</div>
@@ -517,7 +517,7 @@
 															id="revenue-for-last-month-tab" data-toggle="tab"
 															href="#revenue-for-last-month" role="tab"
 															aria-controls="revenue-for-last-month"
-															aria-selected="true">Weekly</a>
+															aria-selected="true">Daily</a>
 													</li>
 													<li class="nav-item">
 														<a class="nav-link pl-2 pr-2" id="server-loading-tab"
@@ -829,7 +829,10 @@ var labels_exp=new Array(4);
 var data_exp=new Array(4);
 var labels_inc=new Array(4);
 var data_inc=new Array(4);
-
+var user_exp_mon_amount=new Array(12);
+var user_inc_mon_amount=new Array(12);
+var user_exp_daily_amount=new Array(32);
+var user_inc_daily_amount=new Array(32);
 var i=0;
 var j=0;
 (function($) {
@@ -882,8 +885,9 @@ var j=0;
 
 		// Expenses end
 
-
+		
 		// Income start 
+		
 		labels_inc=data["labels_inc"];
 		data_inc=data["data_inc"];
 		
@@ -914,6 +918,30 @@ var j=0;
 
 		// style="width: 30%" 
 		// Income end 
+
+
+		// Total Details 
+		var tot_bal=document.getElementById("tot_bal");
+		tot_bal.innerHTML += data["user_acc_balance"];
+
+		
+		var tot_inc=document.getElementById("tot_inc");
+		tot_inc.innerHTML += data["user_inc_total"];
+
+		
+		var tot_exp=document.getElementById("tot_exp");
+		tot_exp.innerHTML += data["user_exp_total"];
+		
+		var temp= parseInt(data["user_acc_balance"])*100/parseInt(data["user_inc_total"]);
+		console.log(temp)
+		var total_acc_progress_bar=document.getElementById("total_acc_progress_bar");
+		total_acc_progress_bar.style = "width: " +temp+'%';
+
+
+		user_exp_mon_amount=data["user_exp_mon_amount"];
+		user_inc_mon_amount=data["user_inc_mon_amount"];
+		user_exp_daily_amount=data["user_exp_daily_amount"];
+		user_inc_daily_amount=data["user_inc_daily_amount"];
 		var salesDifferencedata = {
 			// labels: ["Marriage", "New-car", "Property", "Leh-ladakh trip", "Charity"],
 			labels: x2,
@@ -1140,12 +1168,12 @@ var j=0;
 				options: barChartStackedOptions
 			});
 		}
-// ***************************************WEEKLY STARTS************************
+// ***************************************Daily STARTS************************
 		var revenueChartData = {
-			labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "No", "Dec"],
+			labels: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10","11", "12", "13", "14", "15", "16", "17", "18", "19","20","21", "22", "23", "24", "25", "26", "27", "28", "29","30","31"],
 			datasets: [{
 				label: 'Income',
-				data: [40, 65, 70, 60, 50, 50, 70, 60, 65, 60, 55, 55],
+				data: user_inc_daily_amount,
 				backgroundColor: [
 						'#0ddbb9',
 				],
@@ -1157,7 +1185,7 @@ var j=0;
 			},			
 			{
 				label: 'Expense',
-				data: [25, 25, 50, 50, 30, 30, 50, 40, 45, 40, 35, 35],
+				data: user_exp_daily_amount,
 				borderColor: [
 						'#ee5b5b',
 				],
@@ -1238,7 +1266,7 @@ var j=0;
 			labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "No", "Dec"],
 			datasets: [{
 				label: 'Income',
-				data: [45, 45, 70, 70, 50, 50, 70, 60, 65, 60, 55, 55],
+				data: user_inc_mon_amount,
 				backgroundColor: [
 						'#0ddbb9',
 				],
@@ -1250,7 +1278,7 @@ var j=0;
 			},			
 			{
 				label: 'Expense',
-				data: [25, 25, 50, 50, 30, 30, 50, 40, 45, 40, 35, 35],
+				data: user_exp_mon_amount,
 				borderColor: [
 						'#ee5b5b',
 				],

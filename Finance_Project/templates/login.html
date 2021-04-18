@@ -43,13 +43,8 @@
                 <i class="fab fa-linkedin-in"></i>
               </a>
             </div>
-            {% if messages %}
-            {% for result in messages %}
-            <b style="color: green;">{{result}}</b>
-            {% endfor %}
-            {% endif %}
           </form>
-          <form action="#" class="sign-up-form" method="POST">
+          <form action="#" class="sign-up-form" method="POST" autocomplete="on">
             {% csrf_token %}
             <h2 class="title">Sign up</h2>
             <div class="input-field">
@@ -96,7 +91,8 @@
             {% if messages %}
             <ul class="messages">
               {% for message in messages %}
-              <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+              <!-- <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li> -->
+               <script>alert("{{ message }}")</script> 
               {% endfor %}
             </ul>
             {% endif %}

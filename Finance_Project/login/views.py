@@ -5,11 +5,26 @@ from Finance_Project.models import Goals,expense,income
 from django.contrib import messages
 import json
 from django.db.models import Sum
-
+from django.http import HttpResponseRedirect
 from heapq import nlargest
 from django.http import HttpResponse
+from django.shortcuts import redirect
 
+
+
+import calendar
+import numpy as np
+from django.db.models import Func
+
+def Extract(field, date_field='DOW'):
+    template = "EXTRACT({} FROM %(expressions)s::timestamp)".format(date_field)
+    return Func(field, template=template)
 #Import models of login after creation
+
+def get_week_of_month(year, month, day):
+    x = np.array(calendar.monthcalendar(year, month))
+    week_of_month = np.where(x==day)[0][0] + 1
+    return(week_of_month)
 
 def showdata(request):
     results=Employee.objects.all()
@@ -30,6 +45,8 @@ def login(request):
     return render(request,'login.html')
 
 def UserLogin(request):
+    storage = messages.get_messages(request)
+    storage.used = True
     if request.method=='POST' and 'login' in request.POST:
         
         uname_given=request.POST.get('username_log')
@@ -43,9 +60,9 @@ def UserLogin(request):
         
         if SignUp_details.objects.filter(user_name=uname_given,password=upass_given) :
         #if True:
-            messages.success(request,'Login successfully')
+            # messages.success(request,'Login successfully')
             U_id = SignUp_details.objects.get(user_name=uname_given).user_id
-
+            request.session["User_id"]=U_id
             # Goal chart and calculations
             user_goals_details=Goals.objects.filter(user_id=U_id,Active=True)
             user_goals_names=[]
@@ -57,7 +74,7 @@ def UserLogin(request):
                 # user_goals_perc.append(round(save,2))
                 # user_goals_names.append(x.Goal_name)
                 # print(x.Goal_id)
-            print(U_id)
+            # print(U_id)
 
 
             # for x in temp_dict:
@@ -86,8 +103,10 @@ def UserLogin(request):
             temp_dict_exp={}
             total_exp=expense.objects.filter(user_id=U_id).aggregate(Sum('Amount'))['Amount__sum']
             for x in user_expenses_details:
+                temp_dict_exp[x.Type]=0
+            for x in user_expenses_details:
                 exp_per=int(x.Amount)*100 /int(total_exp)
-                temp_dict_exp[x.Type]=round(exp_per,2)
+                temp_dict_exp[x.Type]=round(temp_dict_exp[x.Type]+exp_per,2)
                 
             for x in temp_dict_exp:
                 print(str(x)+':'+str(temp_dict_exp[x]))
@@ -128,8 +147,10 @@ def UserLogin(request):
             temp_dict_inc={}
             total_inc=income.objects.filter(user_id=U_id).aggregate(Sum('Amount'))['Amount__sum']
             for x in user_inc_details:
+                temp_dict_inc[x.Type]=0
+            for x in user_inc_details:
                 inc_per=int(x.Amount)*100 /int(total_inc)
-                temp_dict_inc[x.Type]=round(inc_per,2)
+                temp_dict_inc[x.Type]=round(temp_dict_inc[x.Type]+inc_per,2)
                 
             for x in temp_dict_inc:
                 print(str(x)+':'+str(temp_dict_inc[x]))
@@ -155,10 +176,144 @@ def UserLogin(request):
             user_inc_names.append("Miscellaneous")
             user_inc_perc.append(round(others_inc,2))
 
-            for x in user_inc_names:
-                print(x)
-            for x in user_inc_perc:
-                print(x)
+            # for x in user_inc_names:
+            #     print(x)
+            # for x in user_inc_perc:
+            #     print(x)
+
+            # Income ends
+
+            # Total details
+            user_inc_total=int(income.objects.filter(user_id=U_id).aggregate(Sum('Amount'))['Amount__sum'])
+            user_exp_total=int(expense.objects.filter(user_id=U_id).aggregate(Sum('Amount'))['Amount__sum']) 
+            user_acc_balance= user_inc_total-user_exp_total if user_inc_total>=user_exp_total else 0
+
+            print(str(user_exp_total)+' '+str(user_inc_total)+' '+str(user_acc_balance))
+
+
+            # Monthly charts
+            # select extract(month from "Date_time"),sum("Amount") from "expense" where extract(year from "Date_time")=2020 group by extract(month from "Date_time")
+            import datetime
+            today=datetime.date.today()
+            
+            # a=expense.objects.filter(user_id=U_id).values('Date_time').annotate(total=Sum('Amount')).order_by('Amount')
+            a=expense.objects.filter(user_id=U_id,Date_time__year=today.year).annotate(month_stamp=Extract('Date_time', 'month')).values_list('month_stamp').annotate(total=Sum('Amount')).order_by('month_stamp')
+            
+            user_exp_mon_num=[]
+            user_exp_mon_amount=[]
+            # a=expense.objects.raw('select extract(month from "Date_time")as MonthNum,sum("Amount") as TotAmount from "expense" where extract(year from "Date_time")=2020 AND "user_id"='+str(U_id)+' group by extract(month from "Date_time")')
+            # print(a)
+
+            for x in a:
+                # print(x[0])
+                user_exp_mon_num.append(x[0])
+                user_exp_mon_amount.append(x[1]/1000)
+                # print(x[1])
+            t1=0
+            for x in range(1,13):
+                
+                if x not in user_exp_mon_num:
+                    user_exp_mon_num.insert(t1,x)
+                    user_exp_mon_amount.insert(t1,0.00)
+                t1+=1
+            # print(user_exp_mon_num)
+            # print(user_exp_mon_amount)
+            # t1=user_expenses_mon.Monthnum
+            # t2=user_expenses_mon.TotAmount
+            
+            # print(user_expenses_mon)
+            # print(t2)
+
+
+
+# a=expense.objects.filter(user_id=U_id).values('Date_time').annotate(total=Sum('Amount')).order_by('Amount')
+            a=income.objects.filter(user_id=U_id,Date_time__year=today.year).annotate(month_stamp=Extract('Date_time', 'month')).values_list('month_stamp').annotate(total=Sum('Amount')).order_by('month_stamp')
+            # print("Here")
+            # print(a)
+            user_inc_mon_num=[]
+            user_inc_mon_amount=[]
+            # a=expense.objects.raw('select extract(month from "Date_time")as MonthNum,sum("Amount") as TotAmount from "expense" where extract(year from "Date_time")=2020 AND "user_id"='+str(U_id)+' group by extract(month from "Date_time")')
+            # print(a)
+
+            for x in a:
+                # print(x[0])
+                user_inc_mon_num.append(x[0])
+                user_inc_mon_amount.append(x[1]/1000)
+                # print(x[1])
+            t1=0
+            for x in range(1,13):
+                
+                if x not in user_inc_mon_num:
+                    user_inc_mon_num.insert(t1,x)
+                    user_inc_mon_amount.insert(t1,0.00)
+                t1+=1
+            # print(user_inc_mon_num)
+            # print(user_inc_mon_amount)
+            # t1=user_expenses_mon.Monthnum
+            # t2=user_expenses_mon.TotAmount
+            
+            # print(user_expenses_mon)
+            # print(t2)
+
+           # jeje=income.objects.filter(Date_time__year=today.year)
+            # print(jeje)
+
+            b=income.objects.filter(user_id=U_id,Date_time__year=today.year,Date_time__month=today.month).annotate(day_stamp=Extract('Date_time','DAY')).values_list('day_stamp').annotate(total=Sum('Amount')).order_by('day_stamp')
+            user_inc_daily_num=[]
+            user_inc_daily_amount=[]
+            # a=expense.objects.raw('select extract(month from "Date_time")as MonthNum,sum("Amount") as TotAmount from "expense" where extract(year from "Date_time")=2020 AND "user_id"='+str(U_id)+' group by extract(month from "Date_time")')
+            # print(b)
+
+            for x in b:
+                # print(x[0])
+                user_inc_daily_num.append(x[0])
+                user_inc_daily_amount.append(x[1]/1000)
+                # print(x[1])
+            t1=0
+            for x in range(1,32):
+                
+                if x not in user_inc_daily_num:
+                    user_inc_daily_num.insert(t1,x)
+                    user_inc_daily_amount.insert(t1,0.00)
+                t1+=1
+            print(user_inc_daily_num)
+            print(user_inc_daily_amount)
+            # t1=user_expenses_mon.Monthnum
+            # t2=user_expenses_mon.TotAmount
+            
+            # print(user_expenses_mon)
+            # print(t2)
+
+
+
+
+            b2=expense.objects.filter(user_id=U_id,Date_time__year=today.year,Date_time__month=today.month).annotate(day_stamp=Extract('Date_time','DAY')).values_list('day_stamp').annotate(total=Sum('Amount')).order_by('day_stamp')
+            user_exp_daily_num=[]
+            user_exp_daily_amount=[]
+            # a=expense.objects.raw('select extract(month from "Date_time")as MonthNum,sum("Amount") as TotAmount from "expense" where extract(year from "Date_time")=2020 AND "user_id"='+str(U_id)+' group by extract(month from "Date_time")')
+            # print(b2)
+
+            for x in b2:
+                # print(x[0])
+                user_exp_daily_num.append(x[0])
+                user_exp_daily_amount.append(x[1]/1000)
+                # print(x[1])
+            t1=0
+            for x in range(1,32):
+                
+                if x not in user_exp_daily_num:
+                    user_exp_daily_num.insert(t1,x)
+                    user_exp_daily_amount.insert(t1,0.00)
+                t1+=1
+            # print(user_exp_daily_num)
+            # print(user_exp_daily_amount)
+            # t1=user_expenses_mon.Monthnum
+            # t2=user_expenses_mon.TotAmount
+            
+            # print(user_expenses_mon)
+            # print(t2)
+
+
 
             results2={
             "data_goals":user_goals_perc,
@@ -166,6 +321,13 @@ def UserLogin(request):
             "data_exp":user_expenses_perc,
             "labels_exp":user_expenses_names,
             "data_inc":user_inc_perc,
+            "user_inc_total":user_inc_total,
+            "user_exp_total":user_exp_total,
+            "user_acc_balance":user_acc_balance,
+            "user_exp_mon_amount":user_exp_mon_amount,
+            "user_inc_mon_amount":user_inc_mon_amount,
+            "user_exp_daily_amount":user_exp_daily_amount,
+            "user_inc_daily_amount":user_inc_daily_amount,
             "labels_inc":user_inc_names,
             "current_user":uname_given,
             "current_user_id":U_id
@@ -174,11 +336,12 @@ def UserLogin(request):
             results2_JSON=json.dumps(results2)
             return render(request,'index_2.html',{"dataval":results2_JSON})
         else:
-            messages.success(request,'Login unsuccessfully')
+            messages.error(request,'Login unsuccessfully')
+            return render(request,'login.html')
         
         
     elif request.method=='POST' and 'signin' in request.POST:
-        
+        flag=0
         user_name=request.POST.get('user_name')
         first_name=request.POST.get('first_name')
         last_name=request.POST.get('last_name')
@@ -186,26 +349,41 @@ def UserLogin(request):
         email_id=request.POST.get('email_id')
         password=request.POST.get('password')
         try:
-            if is_valid(user_name,first_name,last_name,mobile_no,email_id,password):
+            temp=is_valid(user_name,first_name,last_name,mobile_no,email_id,password)
+            if temp==None:
                 messages.success(request,'Register successfully')
-        except ValueError as e:
-                messages.error(request,'Register unsuccessfully:'+ str(e))
+                # return render(request,'login.html')
+                flag=1
+            else:
+                for a in temp:
+                    messages.error(request,'Register unsuccessfully:'+ str(a))
+                    print(str(a))
                 return render(request,'login.html')
-        try:
-            saverecord=SignUp_details()
-            #user_count=SignUp_details.objects.raw("SELECT COUNT(*) FROM signup_details;")
-            #saverecord.user_id=int(user_count)+1
-            saverecord.user_name=user_name
-            saverecord.first_name=first_name
-            saverecord.last_name=last_name
-            saverecord.mobile_no=mobile_no
-            saverecord.email_id=email_id
-            saverecord.password=password
-            saverecord.save()
-            messages.success(request,'Registered successfully!!!')
-            return render(request,'log.html')
-        except:
-            return render(request,'index.html')
+                # return redirect('/')
+                # return render(request, 'login.html', {'messages': messages})
+        except ValueError as e:
+                for a in e:
+                    messages.error(request,'Register unsuccessfully:'+ str(a))
+                    print(str(a))
+
+                
+                # return render(request,'login.html')
+        if flag==1:
+            try:
+                saverecord=SignUp_details()
+                #user_count=SignUp_details.objects.raw("SELECT COUNT(*) FROM signup_details;")
+                #saverecord.user_id=int(user_count)+1
+                saverecord.user_name=user_name
+                saverecord.first_name=first_name
+                saverecord.last_name=last_name
+                saverecord.mobile_no=mobile_no
+                saverecord.email_id=email_id
+                saverecord.password=password
+                saverecord.save()
+                messages.success(request,'Registered successfully!!!')
+                return render(request,'log.html')
+            except:
+                return render(request,'index.html')
         
     else:
         return render(request,'login.html')
@@ -217,40 +395,37 @@ def is_valid(user_name,first_name,last_name,mobile_no,email_id,password):
     flag=0
 
     userreason=user_name_valid(user_name)
-    if not userreason=='':
-        raise ValueError(userreason)
-    return False
-
+    if not len(userreason)==0:
+        return userreason
+    
     pwreason=password_valid(user_name,password)
-    if not pwreason=='':
-        raise ValueError(pwreason)
-    return False
-
+    if not len(pwreason)==0:
+        return pwreason
+    
     if not email_valid(email_id):
-        raise ValueError('Email ID is invalid')
-    return False
-
+        return ['Email ID is invalid']
+    
     nwreason=name_Valid(first_name,last_name)
-    if not nwreason=='':
-        raise ValueError(nwreason)
-    return False
+    if not len(nwreason)==0:
+        return nwreason
         
     if not mob_valid(mobile_no):
-         raise ValueError('Mobile Number is invalid')
-    return False   
-
+         return ['Mobile Number is invalid']
+    
+    return None
 
 
 
 def user_name_valid(username):
     numupper =0
+    pw_final=[]
     for c in username:
         if c.isupper():
             numupper = numupper + 1
 
     if numupper <= 0:
         pwreason=('Username must contain at least one uppercase character')
-        return '',pwreason
+        pw_final.append(pwreason)
 
     numlower =0
     for c in username:
@@ -259,11 +434,11 @@ def user_name_valid(username):
 
     if numlower <= 0:
         pwreason=('username must contain at least one lowercase character')
-        return '', pwreason
+        pw_final.append(pwreason)
 
-        if len(username)<8:
-            pwreason = ('username must be greater than 8 characters')
-            return '',pwreason
+    if len(username)<8:
+        pwreason = ('username must be greater than 8 characters')
+        pw_final.append(pwreason)
 
     numdigit=0
     for c in username:
@@ -272,11 +447,10 @@ def user_name_valid(username):
 
     if numdigit <= 0:
         pwreason= ('username must contain at least one number')
-        return '',pwreason
+        pw_final.append(pwreason)
 
-        
-    else:
-        return ''
+    return pw_final    
+    
 
 
 
@@ -285,13 +459,14 @@ def user_name_valid(username):
 
 def password_valid(username,password):
     numupper =0
+    pw_final=[]
     for c in password:
         if c.isupper():
             numupper = numupper + 1
 
     if numupper <= 0:
         pwreason=('password must contain at least one uppercase character')
-        return '',pwreason
+        pw_final.append(pwreason)
 
     numlower =0
     for c in password:
@@ -300,11 +475,11 @@ def password_valid(username,password):
 
     if numlower <= 0:
         pwreason=('password must contain at least one lowercase character')
-        return '', pwreason
+        pw_final.append(pwreason)
 
         if len(password)<8:
             pwreason = ('password must be greater than 8 characters')
-            return '',pwreason
+            pw_final.append(pwreason)
 
     numdigit=0
     for c in password:
@@ -313,14 +488,13 @@ def password_valid(username,password):
 
     if numdigit <= 0:
         pwreason= ('password must contain at least one number')
-        return '',pwreason
+        pw_final.append(pwreason)
 
     if username in password:
         pwreason= ('username cannot be used as part of your password')
-        return '',pwreason
-        
-    else:
-        return ''
+        pw_final.append(pwreason)
+    return pw_final
+    
 
 
 def email_valid(email_id):
@@ -341,13 +515,14 @@ def email_valid(email_id):
 
 
 def name_Valid(first_name,last_name):
-    
+    pw_final=[]
     if not first_name.isalpha():
         pwreason= ('first name is not valid')
-        return '',pwreason
+        pw_final.append(pwreason)
     if not last_name.isalpha():
-        pwreason= ('first name is not valid')
-        return '',pwreason
+        pwreason= ('Last name is not valid')
+        pw_final.append(pwreason)
+    return pw_final
 
 def mob_valid(mobile_no):
     import re
