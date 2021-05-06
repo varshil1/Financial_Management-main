@@ -21,6 +21,7 @@ from statement.views import GeneratePdf
 from Expense import views as v_exp
 from Income import views as v_inc 
 from Goal import views as v_goal
+from Bills import views as v_bill
 
 urlpatterns = [
     url('admin/', admin.site.urls),
@@ -31,7 +32,10 @@ urlpatterns = [
     url('addIncome',v_inc.AddIncome,name='addIncome'),
     url('viewIncome',v_inc.showIncome,name='viewIncome'),
     url('viewGoal',v_goal.showGoal,name='viewGoal'),
+    url('viewBill',v_bill.showBill,name='viewBill'),
     path('notification/',v_goal.Unread,name='Unread'),
+    path('notification2/',v_goal.delete,name='del'),
+    path('notification3/',v_bill.delete,name='bill_del'),
     path('ajax/getData',v1.getData,name='getData'),
     path('pdf_download/<name>/', GeneratePdf.as_view(template_name='viewGoal.html') , name='pdf_download'),
 ]

@@ -464,7 +464,7 @@
                                                         <!-- DELETE -->
                                                         <button type="button" class="btn btn-inverse-danger btn-fw"
                                                             class="btn btn-primary" data-bs-toggle="modal"
-                                                            data-bs-target="#staticBackdrop">
+                                                            data-bs-target="#staticBackdrop" id="buttock_depo_delete-{{ forloop.counter }}" onclick="Add_Deposit(this)">
                                                             <i class="mdi mdi-delete"></i>
                                                             Delete</button>
 
@@ -488,7 +488,7 @@
                                                                             class="btn btn-inverse-danger"
                                                                             data-bs-dismiss="modal">No</button>
                                                                         <button type="button"
-                                                                            class="btn btn-inverse-success">Yes</button>
+                                                                            class="btn btn-inverse-success" onclick="Delete_Deposit()">Yes</button>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -748,7 +748,7 @@ var butt_pressed;
         butt_pressed=element.id;
              }  
 
-    function Save_Deposit() {   
+             function Save_Deposit() {   
     // console.log(x); 
     var add_amount=document.getElementById("exampleInputAmount_2").value;
     console.log("Amount : "+add_amount);
@@ -774,6 +774,39 @@ var butt_pressed;
             $.post(URL, data);
 
              }  
+
+
+
+
+
+    function Delete_Deposit() {   
+        // console.log(x); 
+        // var add_amount=document.getElementById("exampleInputAmount_2").value;
+        // console.log("Amount : "+add_amount);
+        // document.getElementById("exampleInputAmount_2").value="";
+            // butt_pressed=element.id;
+            // var butt_pressed=0; 
+            // console.log("Button : "+butt_pressed);
+
+            var index=butt_pressed.replace('buttock_depo_delete-','');
+            console.log(index);
+            
+            var URL="{% url 'del' %}"
+            var $crf_token = $('[name="csrfmiddlewaretoken"]').attr('value');
+            
+            // console.log(JSON.parse("{{dataval|escapejs}}"));
+            var data = JSON.parse("{{dataval|escapejs}}");
+            // var i;
+            
+
+            goalID=data[index-1]["Goal_id"];
+            var data = {'index': goalID, 'csrfmiddlewaretoken':$crf_token};
+
+                $.post(URL, data);
+
+             }  
+
+
 
     </script>  
 </body>

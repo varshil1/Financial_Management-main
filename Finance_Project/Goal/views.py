@@ -78,11 +78,65 @@ def Unread(request):
     # print("hello")
     # print("count status ",count)
     
-    if int(amount_to_be_added)<=0:
+    if amount_to_be_added<=0:
         return HttpResponse("Failure")
     
     a=goal.objects.filter(Goal_id=int(index)).values_list('amount_till_now')[0]
     print(a[0])
-    goal.objects.filter(Goal_id=int(index)).update(amount_till_now=amount_to_be_added+a[0])
+
+    amt_to_save=goal.objects.filter(Goal_id=int(index)).values_list('Amount_to_save')[0]
+    amt_remaining=amt_to_save[0]-a[0]
+    if amount_to_be_added > amt_remaining:
+        return HttpResponse("Failure")
+
     
+    goal.objects.filter(Goal_id=int(index)).update(amount_till_now=amount_to_be_added+a[0])
+    # print('H1')
+    # print(amt_remaining)
+    # print(amount_to_be_added)
+    
+    if amt_remaining == amount_to_be_added:
+        goal.objects.filter(Goal_id=int(index)).update(Active=False)
+    # import datetime
+    # today=datetime.date.today()
+    
+    # print("HEYYYYYYYYYYY")
+    # U_id=request.session.get("User_id")
+    # user_goal_details=goal.objects.filter(user_id=U_id,Active=False).order_by('Goal_deadline')
+    # user_goal_details2=goal.objects.filter(user_id=U_id,Active=True).order_by('Goal_deadline').annotate(rem= Cast(F('amount_till_now') ,output_field=FloatField())/Cast(F('Amount_to_save') ,output_field=FloatField()))
+    # # user_goal_details2.rem=F('Amount_till_save')/F('amount_till_now')
+    # # user_goal_details2.save()
+    # print(user_goal_details2)
+    # # results2={
+    # #     "Goal_id":user_goal_details2.values('Goal_id'),
+    # #     "rem":user_goal_details2.values('rem')
+    # #     }
+    # result_list = list(user_goal_details2.values('Goal_id', 'rem'))
+    # results2_JSON=json.dumps(result_list)
+    # return render(request,'viewGoal.html',{'goals': user_goal_details,'goal_active':user_goal_details2,'dataval':results2_JSON})
+
+
+
+    return HttpResponse("Success")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@csrf_exempt
+def delete(request):
+    # print("YESSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS")
+    index=request.POST['index']
+    
+    print(index)
+    goal.objects.filter(Goal_id=int(index)).update(Active=False)
     return HttpResponse("Success")

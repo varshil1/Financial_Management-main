@@ -281,6 +281,21 @@
 							</div>
 						</li>
 						
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                              <i class="mdi mdi-trophy-outline" style="font-size: 28px;"></i>
+                              <span class="menu-title">Bills</span>
+                              <i class="menu-arrow"></i>
+                            </a>
+                            <div class="submenu">
+                              <ul>
+                                <li class="nav-item"><a class="nav-link" href="../../pages/Bills/addBill.html">Add Bill</a></li>
+                                <!-- <li class="nav-item"><a class="nav-link" href="#">View Expense</a></li> -->
+                                <li class="nav-item"><a class="nav-link" href="{% url 'viewBill' %}">View Bills</a></li>
+              
+                              </ul>
+                            </div>
+                          </li>
 						<li class="nav-item">
 							<a href="{% static "pages/icons/mdi.html" %}" class="nav-link">
 								<i class="mdi mdi-emoticon menu-icon"></i>

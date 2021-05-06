@@ -45,7 +45,8 @@ INSTALLED_APPS = [
     'statement',
     'Income',
     'Expense',
-    'Goal'
+    'Goal',
+    'Bills'
 ]
 
 MIDDLEWARE = [
