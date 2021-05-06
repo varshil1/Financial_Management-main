@@ -41,7 +41,7 @@ class Goals(models.Model):
   Amount_to_save=models.IntegerField()
   amount_till_now=models.IntegerField()
   Active=models.BooleanField()
-  Goal_deadline=models.IntegerField()
+  Goal_deadline=models.DateTimeField()
   class Meta:
      db_table="Goals"
 

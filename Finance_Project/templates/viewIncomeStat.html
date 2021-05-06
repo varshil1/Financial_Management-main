@@ -344,14 +344,18 @@
                   <table class="table">
                     <thead>
                       <tr>
+                        <form class="form-control" method="POST">
+  
+                          {% csrf_token %}
                         <th style="width: 300px;"><label for="exampleInputDate" style="color: rgb(60, 30, 228);">&nbsp &nbsp From:</label>
-                          <input type="date" class="form-control"> </th>
+                          <input type="date" class="form-control" name="date_start" > </th>
                         <th style="width: 300px;"><label for="exampleInputDate" style="color: rgb(60, 30, 228);">&nbsp &nbsp To:</label>
-                          <input type="date" class="form-control">                                      
+                          <input type="date" class="form-control"  name="date_end">                                      
                  </th>
-                        <th> <button type="button" class="btn btn-primary btn-rounded btn-fw" style="margin: 5px;" >Search</button>
+                        <th> <button type="submit" class="btn btn-primary btn-rounded btn-fw" style="margin: 5px;"  name="date_submit" >Search</button>
                         </th>
-                    
+                                  
+  </form>
                       </tr>
                     </thead>
                     <tbody>
@@ -385,7 +389,30 @@
                         <tbody>
 
                             <!-- 1ST ROW -->
+
+
+
+                            {% for inc in incomes %}
                             <tr>
+                              <td> <span style="font-family:Arial; ">&#8377;</span>{{ inc.Amount }}</td>
+                              <td>{{ inc.Date_time }} </td>
+                              <td>{{ inc.Type }}</td>
+                                <td>{{ inc.detail }}</td>
+                                
+                              {% endfor %}
+
+                              {% if messages %}
+                              <ul class="messages">
+                                {% for message in messages %}
+                                <!-- <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li> -->
+                                <script>alert("{{ message }}")</script> 
+                                {% endfor %}
+                              </ul>
+                              {% endif %}
+                               
+                            </tr>
+
+                            <!-- <tr>
                               <td> <span style="font-family:Arial; ">&#8377;</span>4000</td>
                               <td>May 15,2021 </td>
                               <td>Category</td>
@@ -393,11 +420,11 @@
 
                               
                                
-                            </tr>
+                            </tr> -->
 
 
                             <!-- 2ND ROW -->
-                            <tr>
+                            <!-- <tr>
                               <td> <span style="font-family:Arial; ">&#8377;</span>4000</td>
                               <td>May 15,2021 </td>
                               <td>Category</td>
@@ -405,9 +432,9 @@
 
                               
                                
-                            </tr>
+                            </tr> -->
                             <!-- 3RD ROW -->
-                            <tr>
+                            <!-- <tr>
                               <td> <span style="font-family:Arial; ">&#8377;</span>4000</td>
                               <td>May 15,2021 </td>
                               <td>Category</td>
@@ -415,7 +442,7 @@
 
                               
                                
-                            </tr>
+                            </tr> -->
 
                         </tbody>
                     </table>
@@ -460,8 +487,142 @@
   <script src="{% static "vendors/chart.js/Chart.min.js" %}"></script>
   <!-- End plugin js for this page -->
   <!-- Custom js for this page-->
-  <script src="{% static "js/chart.js" %}"></script>
+  <!-- <script src="{% static "js/chart.js" %}"></script> -->
   <!-- End custom js for this page-->
+
+
+  <script>
+
+
+    var user_inc_mon_num=new Array(12);
+    var user_inc_mon_amount=new Array(12);
+    
+    var user_income_names=new Array(100);
+    var user_income_perc=new Array(100);
+    
+    $(function() {
+      /* ChartJS
+       * -------
+       * Data and config for chartjs
+       */
+      'use strict';
+        console.log(JSON.parse("{{dataval|escapejs}}"));
+        var data = JSON.parse("{{dataval|escapejs}}");
+        user_inc_mon_num=data["user_inc_mon_num"];
+        user_inc_mon_amount=data["user_inc_mon_amount"];
+        user_income_names=data["user_income_names"];
+        user_income_perc=data["user_income_perc"];
+        
+      var data = {
+        labels: user_inc_mon_num,
+        datasets: [{
+          label: '# of Votes',
+          data: user_inc_mon_amount,
+          backgroundColor: [
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(54, 162, 235, 0.2)',
+            'rgba(255, 206, 86, 0.2)',
+            'rgba(75, 192, 192, 0.2)',
+            'rgba(153, 102, 255, 0.2)',
+            'rgba(255, 159, 64, 0.2)'
+          ],
+          borderColor: [
+            'rgba(255,99,132,1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+            'rgba(255, 159, 64, 1)'
+          ],
+          borderWidth: 1,
+          fill: false
+        }]
+      };
+      var options = {
+        scales: {
+          yAxes: [{
+            ticks: {
+              beginAtZero: true
+            }
+          }]
+        },
+        legend: {
+          display: false
+        },
+        elements: {
+          point: {
+            radius: 0
+          }
+        }
+    
+      };
+      var doughnutPieData = {
+        datasets: [{
+          data: user_income_perc,
+          backgroundColor: [
+            'rgba(255, 99, 132, 0.5)',
+            'rgba(54, 162, 235, 0.5)',
+            'rgba(255, 206, 86, 0.5)',
+            'rgba(75, 192, 192, 0.5)',
+            'rgba(153, 102, 255, 0.5)',
+            'rgba(255, 159, 64, 0.5)'
+          ],
+          borderColor: [
+            'rgba(255,99,132,1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+            'rgba(255, 159, 64, 1)'
+          ],
+        }],
+    
+        // These labels appear in the legend and in the tooltips when hovering different arcs
+        labels:user_income_names
+      };
+      var doughnutPieOptions = {
+        responsive: true,
+        animation: {
+          animateScale: true,
+          animateRotate: true
+        }
+      };
+      
+      // Get context with jQuery - using jQuery's .get() method.
+      if ($("#barChart").length) {
+        var barChartCanvas = $("#barChart").get(0).getContext("2d");
+        // This will get the first returned node in the jQuery collection.
+        var barChart = new Chart(barChartCanvas, {
+          type: 'bar',
+          data: data,
+          options: options
+        });
+      }
+      
+    
+      if ($("#pieChart").length) {
+        var pieChartCanvas = $("#pieChart").get(0).getContext("2d");
+        var pieChart = new Chart(pieChartCanvas, {
+          type: 'pie',
+          data: doughnutPieData,
+          options: doughnutPieOptions
+        });
+      }
+    
+      
+    });
+    
+    
+    
+    
+    
+    
+    
+      </script>
+    
+
+
+
 </body>
 
 </html>

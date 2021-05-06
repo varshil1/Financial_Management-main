@@ -20,6 +20,7 @@ from statement import views as v2
 from statement.views import GeneratePdf
 from Expense import views as v_exp
 from Income import views as v_inc 
+from Goal import views as v_goal
 
 urlpatterns = [
     url('admin/', admin.site.urls),
@@ -28,6 +29,9 @@ urlpatterns = [
     url('addExpense',v_exp.AddExpense,name='addExpense'),
     url('viewExpense',v_exp.showExpense,name='viewExpense'),
     url('addIncome',v_inc.AddIncome,name='addIncome'),
+    url('viewIncome',v_inc.showIncome,name='viewIncome'),
+    url('viewGoal',v_goal.showGoal,name='viewGoal'),
+    path('notification/',v_goal.Unread,name='Unread'),
     path('ajax/getData',v1.getData,name='getData'),
-    path('pdf_download/<name>/', GeneratePdf.as_view(template_name='log.html') , name='pdf_download'),
+    path('pdf_download/<name>/', GeneratePdf.as_view(template_name='viewGoal.html') , name='pdf_download'),
 ]
