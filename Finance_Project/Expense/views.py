@@ -198,6 +198,9 @@ def AddExpense(request):
                 save_expense=expense()
                 #user_count=SignUp_details.objects.raw("SELECT COUNT(*) FROM signup_details;")
                 #saverecord.user_id=int(user_count)+1
+                user_count=expense.objects.all().count()
+                save_expense.Expense_id=int(user_count)+1
+                
                 save_expense.user_id=u_id
                 save_expense.Amount=exp_amount
                 save_expense.Date_time=exp_date

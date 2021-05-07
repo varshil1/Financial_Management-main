@@ -65,9 +65,23 @@ def showGoal(request):
         #     "Goal_id":user_goal_details2.values('Goal_id'),
         #     "rem":user_goal_details2.values('rem')
         #     }
-        result_list = list(user_goal_details2.values('Goal_id', 'rem'))
-        results2_JSON=json.dumps(result_list)
+        # import datetime
+        # import json
+
+        
+        
+        
+        
+        result_list = list(user_goal_details2.values('Goal_id','rem','Goal_name','description','Amount_to_save','Goal_deadline'))
+        results2_JSON=json.dumps(result_list,default=default)
         return render(request,'viewGoal.html',{'goals': user_goal_details,'goal_active':user_goal_details2,'dataval':results2_JSON})
+
+
+def default(o):
+    import datetime
+    if isinstance(o, (datetime.date, datetime.datetime)):
+        return o.isoformat()
+
 
 @csrf_exempt
 def Unread(request):
@@ -127,6 +141,31 @@ def Unread(request):
 
 
 
+@csrf_exempt
+def Update(request):
+    print("YESSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS")
+    index=request.POST['index']
+    
+    print(index)
+
+    new_goal=request.POST['update_goal']
+    new_goal_desc=request.POST['update_goal_desc']
+    new_goal_amt=int(request.POST['update_goal_amount'])
+    new_goal_date=request.POST['update_goal_date']
+    
+    # print(new_goal)
+    # print(new_goal_amt)
+    # print(new_goal_date)
+    # print(new_goal_desc)
+    # goal.objects.filter(Goal_id=int(index)).update(Active=False)
+
+    if new_goal_amt<=0:
+        return HttpResponse("Failure")
+
+    goal.objects.filter(Goal_id=int(index)).update(Goal_name=new_goal,Amount_to_save=new_goal_amt,Goal_deadline=new_goal_date,description=new_goal_desc)
+    
+
+    return HttpResponse("Success")
 
 
 
@@ -140,3 +179,76 @@ def delete(request):
     print(index)
     goal.objects.filter(Goal_id=int(index)).update(Active=False)
     return HttpResponse("Success")
+
+
+
+
+def AddGoal(request):
+    if request.method=='POST' and 'Goals' in request.POST:
+            # from __main__ import *
+            # u_id = U_id
+            # count_income=income.objects.raw("SELECT COUNT(*) FROM income;")
+            # inc_id = count_income+1
+            #print(inc_id)
+            u_id=request.session.get("User_id")
+            print("Are we getting it??")
+            print(u_id)
+                
+            goal_name=request.POST.get('Goal_name')
+            goal_desc=request.POST.get('Goal_desc')
+            goal_amount=int(request.POST.get('Goal_amount'))
+            
+            print(goal_amount)
+
+            goal_date=request.POST.get('Goal_date')
+            print(goal_desc)
+            print(goal_date)
+            print('YESSSSS')
+            try:
+                if is_valid(goal_amount):
+                    messages.success(request,'Goal added successfully')
+                    print("sucess")
+            except ValueError as e:
+                    messages.error(request,''+ str(e))
+                    print("sucess not")
+            try:
+                save_goal=goal()
+                #user_count=SignUp_details.objects.raw("SELECT COUNT(*) FROM signup_details;")
+                #saverecord.user_id=int(user_count)+1
+
+                user_count=goal.objects.all().count()
+                save_goal.Goal_id=int(user_count)+1
+            
+                save_goal.user_id=u_id
+                save_goal.Amount_to_save=goal_amount
+                save_goal.Goal_deadline=goal_date
+                save_goal.Active=True
+                save_goal.amount_till_now='0'
+                save_goal.Goal_name=goal_name
+                save_goal.description=goal_desc
+                save_goal.save()
+                messages.success(request,'Goal added successfully!!!')
+                print("sucess")
+                return render(request,'addGoal.html')
+            except ValueError as e:
+                print(e)
+                return render(request,'addGoal.html')
+
+    else :
+        return render(request,'addGoal.html')
+
+def is_valid(goal_amount):
+    amount_reason = amount_valid(goal_amount)
+    if not amount_reason == '':
+        raise ValueError(amount_reason)
+    return False
+
+
+def amount_valid(goal_amount):
+    if goal_amount < 0 :
+        reason=('Amount entered is not valid.')
+        return '',reason
+    else:
+        return ''
+
+

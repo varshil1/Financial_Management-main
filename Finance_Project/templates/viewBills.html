@@ -164,10 +164,10 @@
                                         <i class="mdi mdi-file-pdf text-primary"></i>
                                         Pdf
                                     </a>
-                                    <a class="dropdown-item">
+                                    <!-- <a class="dropdown-item">
                                         <i class="mdi mdi-file-excel text-primary"></i>
                                         Exel
-                                    </a>
+                                    </a> -->
                                 </div>
                             </li>
                             <!-- <li class="nav-item dropdown d-lg-flex d-none">
@@ -182,10 +182,10 @@
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-right navbar-dropdown"
                                     aria-labelledby="profileDropdown">
-                                    <a class="dropdown-item">
+                                    <!-- <a class="dropdown-item">
                                         <i class="mdi mdi-settings text-primary"></i>
                                         Settings
-                                    </a>
+                                    </a> -->
                                     <a class="dropdown-item">
                                         <i class="mdi mdi-logout text-primary"></i>
                                         Logout
@@ -203,8 +203,9 @@
             <nav class="bottom-navbar">
                 <div class="container">
                     <ul class="nav page-navigation">
+                        
                         <li class="nav-item">
-                            <a class="nav-link" href="{% static "index.html" %}">
+                            <a class="nav-link" href="#">
                                 <i class="mdi mdi-view-list" style="font-size: 28px;"></i>
                                 <span class="menu-title">Dashboard</span>
                             </a>
@@ -217,100 +218,74 @@
                             </a>
                             <div class="submenu">
                                 <ul>
-                                    <li class="nav-item"><a class="nav-link"
-                                            href="../../pages/Income/addIncome.html">Add
+                                    <li class="nav-item"><a class="nav-link" href="{% url 'addIncome' %}">Add
                                             Income</a></li>
-                                    <!-- <li class="nav-item"><a class="nav-link"
-											href="../../pages/ui-features/typography.html">View Income</a></li> -->
+                                    <!-- <li class="nav-item"><a class="nav-link" href="pages/ui-features/typography.html">View Income</a></li> -->
                                     <li class="nav-item"><a class="nav-link"
-                                            href="../../pages/Income/viewIncomeStat.html">View Income Statement</a>
-                                    </li>
-
+                                            href="{% url 'viewIncome' %}">View Income Statement</a></li>
+              
                                 </ul>
                             </div>
                         </li>
                         <li class="nav-item">
-                            <a href="../../pages/forms/basic_elements.html" class="nav-link">
+                            <a href="{% static "pages/forms/basic_elements.html" %}" class="nav-link">
                                 <i class="mdi mdi-trending-down" style="font-size: 28px;"></i>
                                 <span class="menu-title">Expense</span>
                                 <i class="menu-arrow"></i>
                             </a>
                             <div class="submenu">
                                 <ul>
-                                    <li class="nav-item"><a class="nav-link" href="../../pages/Expense/addExpense.html">Add Expense</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="{% url 'addExpense' %}">Add Expense</a></li>
                                     <!-- <li class="nav-item"><a class="nav-link" href="#">View Expense</a></li> -->
-                                    <li class="nav-item"><a class="nav-link" href="../../pages/Expense/viewExpenseStat.html">View Expense Statement</a></li>
-
-                                </ul>
-                            </div>
-                        </li>
-                        <li class="nav-item">
-                            <a href="../../pages/charts/chartjs.html" class="nav-link">
-                                <i class="mdi mdi-chart-areaspline" style="font-size:28px;"></i>
-                                <span class="menu-title">Charts</span>
-                                <i class="menu-arrow"></i>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
+                                    <li class="nav-item"><a class="nav-link" href="{% url 'viewExpense' %}">View Expense Statement</a></li>
+              
+                                  </ul>
+                                </div>
+                            </li>
+                            <!-- <li class="nav-item">
+                                <a href="{% static "pages/charts/chartjs.html" %}"class="nav-link">
+                                    <i class="mdi mdi-chart-areaspline" style="font-size: 28px;"></i>
+                                    <span class="menu-title">Charts</span>
+                                    <i class="menu-arrow"></i>
+                                </a>
+                            </li> -->
+                            <li class="nav-item">
+                              <a href="#" class="nav-link">
                                 <i class="mdi mdi-trophy-outline" style="font-size: 28px;"></i>
                                 <span class="menu-title">Goals</span>
                                 <i class="menu-arrow"></i>
-                            </a>
-                            <div class="submenu">
+                              </a>
+                              <div class="submenu">
                                 <ul>
-                                    <li class="nav-item"><a class="nav-link" href="../../pages/Goals/addGoal.html">Add a
-                                            Goal</a></li>
-                                    <!-- <li class="nav-item"><a class="nav-link" href="#">View Expense</a></li> -->
-                                    <li class="nav-item"><a class="nav-link" href="../../pages/Goals/viewGoal.html">View
-                                            Goals</a></li>
-
+                                  <li class="nav-item"><a class="nav-link" href="{% url 'addGoal' %}">Add a Goal</a></li>
+                                  <!-- <li class="nav-item"><a class="nav-link" href="#">View Expense</a></li> -->
+                                  <li class="nav-item"><a class="nav-link" href="{% url 'viewGoal' %}">View Goals</a></li>
+                
                                 </ul>
-                            </div>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="mdi mdi-equal-box" style="font-size: 28px;"></i>
+                              </div>
+                            </li>
+                            <li class="nav-item">
+                              <a href="#" class="nav-link">
+                                <i class="mdi mdi-trophy-outline" style="font-size: 28px;"></i>
                                 <span class="menu-title">Bills</span>
                                 <i class="menu-arrow"></i>
-                            </a>
-                            <div class="submenu">
+                              </a>
+                              <div class="submenu">
                                 <ul>
-                                    <li class="nav-item"><a class="nav-link" href="../../pages/Bills/addBill.html">Add Bill</a></li>
-                                    <!-- <li class="nav-item"><a class="nav-link" href="#">View Expense</a></li> -->
-                                    <li class="nav-item"><a class="nav-link" href="../../pages/Bills/viewBills.html">View Bills</a></li>
-
+                                  <li class="nav-item"><a class="nav-link" href="{% url 'addBill' %}">Add Bill</a></li>
+                                  <!-- <li class="nav-item"><a class="nav-link" href="#">View Expense</a></li> -->
+                                  <li class="nav-item"><a class="nav-link" href="{% url 'viewBill' %}">View Bills</a></li>
+                
                                 </ul>
-                            </div>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="mdi mdi-codepen menu-icon"></i>
-                                <span class="menu-title">Additional Feature</span>
-                                <i class="menu-arrow"></i>
-                            </a>
-                            <div class="submenu">
-                                <ul class="submenu-item">
-                                    <li class="nav-item"><a class="nav-link"
-                                            href="../../pages/samples/login.html">Login</a>
-                                    </li>
-                                    <li class="nav-item"><a class="nav-link"
-                                            href="../../pages/samples/login-2.html">Login
-                                            2</a></li>
-                                    <li class="nav-item"><a class="nav-link"
-                                            href="../../pages/samples/register.html">Register</a></li>
-                                    <li class="nav-item"><a class="nav-link"
-                                            href="../../pages/samples/register-2.html">Register 2</a></li>
-                                    <li class="nav-item"><a class="nav-link"
-                                            href="../../pages/samples/lock-screen.html">Lockscreen</a></li>
-                                </ul>
-                            </div>
-                        </li>
-                        <!-- <li class="nav-item">
-                  <a href="docs/documentation.html" class="nav-link">
-                    <i class="mdi mdi-file-document-box-outline menu-icon"></i>
-                    <span class="menu-title">Documentation</span></a>
-              </li> -->
+                              </div>
+                            </li>  
+                              
+                              <!-- <li class="nav-item">
+                          <a href="docs/documentation.html" class="nav-link">
+                            <i class="mdi mdi-file-document-box-outline menu-icon"></i>
+                            <span class="menu-title">Documentation</span></a>
+                      </li> -->
+              
                     </ul>
                 </div>
             </nav>

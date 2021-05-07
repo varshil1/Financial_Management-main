@@ -164,10 +164,10 @@
                                         <i class="mdi mdi-file-pdf text-primary"></i>
                                         Pdf
                                     </a>
-                                    <a class="dropdown-item">
+                                    <!-- <a class="dropdown-item">
                                         <i class="mdi mdi-file-excel text-primary"></i>
                                         Exel
-                                    </a>
+                                    </a> -->
                                 </div>
                             </li>
                             <!-- <li class="nav-item dropdown d-lg-flex d-none">
@@ -182,10 +182,10 @@
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-right navbar-dropdown"
                                     aria-labelledby="profileDropdown">
-                                    <a class="dropdown-item">
+                                    <!-- <a class="dropdown-item">
                                         <i class="mdi mdi-settings text-primary"></i>
                                         Settings
-                                    </a>
+                                    </a> -->
                                     <a class="dropdown-item">
                                         <i class="mdi mdi-logout text-primary"></i>
                                         Logout
@@ -204,7 +204,7 @@
                 <div class="container">
                     <ul class="nav page-navigation">
                         <li class="nav-item">
-                            <a class="nav-link" href="../../index.html">
+                            <a class="nav-link" href="#">
                                 <i class="mdi mdi-view-list" style="font-size: 28px;"></i>
                                 <span class="menu-title">Dashboard</span>
                             </a>
@@ -217,100 +217,74 @@
                             </a>
                             <div class="submenu">
                                 <ul>
-                                    <li class="nav-item"><a class="nav-link"
-                                            href="{% static "pages/Income/addIncome.html" %}">Add
+                                    <li class="nav-item"><a class="nav-link" href="{% url 'addIncome' %}">Add
                                             Income</a></li>
-                                    <!-- <li class="nav-item"><a class="nav-link"
-											href="../../pages/ui-features/typography.html">View Income</a></li> -->
+                                    <!-- <li class="nav-item"><a class="nav-link" href="pages/ui-features/typography.html">View Income</a></li> -->
                                     <li class="nav-item"><a class="nav-link"
-                                            href="{% static "pages/Income/viewIncomeStat.html" %}">View Income Statement</a>
-                                    </li>
-
+                                            href="{% url 'viewIncome' %}">View Income Statement</a></li>
+              
                                 </ul>
                             </div>
                         </li>
                         <li class="nav-item">
-                            <a href="../../pages/forms/basic_elements.html" class="nav-link">
+                            <a href="{% static "pages/forms/basic_elements.html" %}" class="nav-link">
                                 <i class="mdi mdi-trending-down" style="font-size: 28px;"></i>
                                 <span class="menu-title">Expense</span>
                                 <i class="menu-arrow"></i>
                             </a>
                             <div class="submenu">
                                 <ul>
-                                    <li class="nav-item"><a class="nav-link" href="../../pages/Expense/addExpense.html">Add Expense</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="{% url 'addExpense' %}">Add Expense</a></li>
                                     <!-- <li class="nav-item"><a class="nav-link" href="#">View Expense</a></li> -->
-                                    <li class="nav-item"><a class="nav-link" href="../../pages/Expense/viewExpenseStat.html">View Expense Statement</a></li>
-
-                                </ul>
-                            </div>
-                        </li>
-                        <li class="nav-item">
-                            <a href="../../pages/charts/chartjs.html" class="nav-link">
-                                <i class="mdi mdi-chart-areaspline" style="font-size:28px;"></i>
-                                <span class="menu-title">Charts</span>
-                                <i class="menu-arrow"></i>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
+                                    <li class="nav-item"><a class="nav-link" href="{% url 'viewExpense' %}">View Expense Statement</a></li>
+              
+                                  </ul>
+                                </div>
+                            </li>
+                            <!-- <li class="nav-item">
+                                <a href="{% static "pages/charts/chartjs.html" %}"class="nav-link">
+                                    <i class="mdi mdi-chart-areaspline" style="font-size: 28px;"></i>
+                                    <span class="menu-title">Charts</span>
+                                    <i class="menu-arrow"></i>
+                                </a>
+                            </li> -->
+                            <li class="nav-item">
+                              <a href="#" class="nav-link">
                                 <i class="mdi mdi-trophy-outline" style="font-size: 28px;"></i>
                                 <span class="menu-title">Goals</span>
                                 <i class="menu-arrow"></i>
-                            </a>
-                            <div class="submenu">
+                              </a>
+                              <div class="submenu">
                                 <ul>
-                                    <li class="nav-item"><a class="nav-link" href="../../pages/Goals/addGoal.html">Add a
-                                            Goal</a></li>
-                                    <!-- <li class="nav-item"><a class="nav-link" href="#">View Expense</a></li> -->
-                                    <li class="nav-item"><a class="nav-link" href="../../pages/Goals/viewGoal.html">View
-                                            Goals</a></li>
-
+                                  <li class="nav-item"><a class="nav-link" href="{% url 'addGoal' %}">Add a Goal</a></li>
+                                  <!-- <li class="nav-item"><a class="nav-link" href="#">View Expense</a></li> -->
+                                  <li class="nav-item"><a class="nav-link" href="{% url 'viewGoal' %}">View Goals</a></li>
+                
                                 </ul>
-                            </div>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                              <i class="mdi mdi-trophy-outline" style="font-size: 28px;"></i>
-                              <span class="menu-title">Bills</span>
-                              <i class="menu-arrow"></i>
-                            </a>
-                            <div class="submenu">
-                              <ul>
-                                <li class="nav-item"><a class="nav-link" href="../../pages/Bills/addBill.html">Add Bill</a></li>
-                                <!-- <li class="nav-item"><a class="nav-link" href="#">View Expense</a></li> -->
-                                <li class="nav-item"><a class="nav-link" href="../../pages/Bills/viewBills.html">View Bills</a></li>
-              
-                              </ul>
-                            </div>
-                          </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="mdi mdi-codepen menu-icon"></i>
-                                <span class="menu-title">Additional Feature</span>
+                              </div>
+                            </li>
+                            <li class="nav-item">
+                              <a href="#" class="nav-link">
+                                <i class="mdi mdi-trophy-outline" style="font-size: 28px;"></i>
+                                <span class="menu-title">Bills</span>
                                 <i class="menu-arrow"></i>
-                            </a>
-                            <div class="submenu">
-                                <ul class="submenu-item">
-                                    <li class="nav-item"><a class="nav-link"
-                                            href="../../pages/samples/login.html">Login</a>
-                                    </li>
-                                    <li class="nav-item"><a class="nav-link"
-                                            href="../../pages/samples/login-2.html">Login
-                                            2</a></li>
-                                    <li class="nav-item"><a class="nav-link"
-                                            href="../../pages/samples/register.html">Register</a></li>
-                                    <li class="nav-item"><a class="nav-link"
-                                            href="../../pages/samples/register-2.html">Register 2</a></li>
-                                    <li class="nav-item"><a class="nav-link"
-                                            href="../../pages/samples/lock-screen.html">Lockscreen</a></li>
+                              </a>
+                              <div class="submenu">
+                                <ul>
+                                  <li class="nav-item"><a class="nav-link" href="{% url 'addBill' %}">Add Bill</a></li>
+                                  <!-- <li class="nav-item"><a class="nav-link" href="#">View Expense</a></li> -->
+                                  <li class="nav-item"><a class="nav-link" href="{% url 'viewBill' %}">View Bills</a></li>
+                
                                 </ul>
-                            </div>
-                        </li>
-                        <!-- <li class="nav-item">
-                  <a href="docs/documentation.html" class="nav-link">
-                    <i class="mdi mdi-file-document-box-outline menu-icon"></i>
-                    <span class="menu-title">Documentation</span></a>
-              </li> -->
+                              </div>
+                            </li>  
+                              
+                              <!-- <li class="nav-item">
+                          <a href="docs/documentation.html" class="nav-link">
+                            <i class="mdi mdi-file-document-box-outline menu-icon"></i>
+                            <span class="menu-title">Documentation</span></a>
+                      </li> -->
+              
                     </ul>
                 </div>
             </nav>
@@ -407,7 +381,7 @@
 
                                                         <button type="button" class="btn btn-inverse-success btn-fw"
                                                         class="btn btn-primary" data-bs-toggle="modal"
-                                                        data-bs-target="#staticBackdrop2">
+                                                        data-bs-target="#staticBackdrop2" id="buttock_depo_edit-{{ forloop.counter }}" onclick="Edit_Goal_button(this)">
                                                             <i class="mdi mdi-pencil-box-outline btn-icon-append "></i>
                                                             Edit</button>
 
@@ -425,25 +399,25 @@
                                                                     </div>
                                                                     <div class="modal-body">
                                                                         <div class="form-group">
-                                                                            <label for="exampleIncomeCategory">Edit Goal</label>
-                                                                      <input type="text" class="form-control" id="exampleInput_goal_{{ g.Goal_id }}" placeholder="Enter Goal">
+                                                                            <label for="exampleInput_goal">Edit Goal</label>
+                                                                      <input type="text" class="form-control" id="exampleInput_goal" placeholder="Enter Goal">
                                                                         
                                                                             </div>
                                                                           <div class="form-group">
                                                                             <!-- <label for="exampleInputUsername1">Username</label>
                                                                             <input type="text" class="form-control" id="exampleInputUsername1" placeholder="Username"> -->
                                                       
-                                                                            <label for="exampleInputGoalDescription_{{ g.Goal_id }}">Edit Description</label>
-                                                                            <input type="text" class="form-control" id="exampleInputGoalDescription_{{ g.Goal_id }}" placeholder="Enter Description about Goal">
+                                                                            <label for="exampleInputGoalDescription">Edit Description</label>
+                                                                            <input type="text" class="form-control" id="exampleInputGoalDescription" placeholder="Enter Description about Goal">
                                                                           </div>
                                                                         <div class="form-group">
-                                                                          <label for="exampleInputGoalAmount_{{ g.Goal_id }}">Edit Amount:</label>
+                                                                          <label for="exampleInputGoalAmount">Edit Amount:</label>
                                                                           <span	style="font-family:Arial; ">&#8377;</span>
-                                                                          <input type="text" class="form-control" id="exampleInputGoalAmount_{{ g.Goal_id }}" placeholder="Enter Amount">
+                                                                          <input type="text" class="form-control" id="exampleInputGoalAmount" placeholder="Enter Amount">
                                                                         </div>
                                                                         <div class="form-group">
-                                                                          <label for="exampleInputGoalDate_{{ g.Goal_id }}">Edit Goal Deadline</label>
-                                                                          <input type="date" class="form-control" id="exampleInputGoalDate_{{ g.Goal_id }}">                                      
+                                                                          <label for="exampleInputGoalDate">Edit Goal Deadline</label>
+                                                                          <input type="date" class="form-control" id="exampleInputGoalDate">                                      
                                                                              </div>       
                                                                     </div>
                                                                     <div class="modal-footer">
@@ -451,7 +425,7 @@
                                                                             class="btn btn-inverse-danger"
                                                                             data-bs-dismiss="modal">Cancel</button>
                                                                         <button type="button"
-                                                                            class="btn btn-inverse-success" id="Edit_goal_save_{{ g.Goal_id }}">Save</button>
+                                                                            class="btn btn-inverse-success" id="buttock-save-{{ forloop.counter }}" onclick="Update_Deposit(this)">Save</button>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -748,6 +722,38 @@ var butt_pressed;
         butt_pressed=element.id;
              }  
 
+
+             function Edit_Goal_button(element){
+
+                console.log(element.id);
+                butt_pressed=element.id;
+
+                // console.log("Amount : "+add_amount);
+                // document.getElementById("exampleInputAmount_2").value="";
+                    // butt_pressed=element.id;
+                    // var butt_pressed=0; 
+                    // console.log("Button : "+butt_pressed);
+
+                    var index=butt_pressed.replace('buttock_depo_edit-','');
+                    console.log(index);
+                    
+                    // console.log(JSON.parse("{{dataval|escapejs}}"));
+                    var data = JSON.parse("{{dataval|escapejs}}");
+                    // var i;
+                    goalID=data[index-1]["Goal_id"];
+
+                    console.log("HEYYY");
+                    console.log(goalID);
+                    console.log(data[index-1]["rem"]);
+
+                    document.getElementById("exampleInput_goal").value=data[index-1]["Goal_name"];
+                    document.getElementById("exampleInputGoalDescription").value=data[index-1]["description"];
+                    document.getElementById("exampleInputGoalAmount").value=data[index-1]["Amount_to_save"];
+                    document.getElementById("exampleInputGoalDate").value=data[index-1]["Goal_deadline"];
+
+    
+             }
+
              function Save_Deposit() {   
     // console.log(x); 
     var add_amount=document.getElementById("exampleInputAmount_2").value;
@@ -774,6 +780,45 @@ var butt_pressed;
             $.post(URL, data);
 
              }  
+
+
+
+
+             function Update_Deposit() {   
+    // console.log(x); 
+
+
+    // exampleInput_goal,exampleInputGoalDescription,exampleInputGoalAmount,exampleInputGoalDate
+    var update_goal=document.getElementById("exampleInput_goal").value;
+    var update_goal_desc=document.getElementById("exampleInputGoalDescription").value;
+    var update_goal_amount=document.getElementById("exampleInputGoalAmount").value;
+    var update_goal_date=document.getElementById("exampleInputGoalDate").value;
+
+    // console.log("Amount : "+add_amount);
+    // document.getElementById("exampleInputAmount_2").value="";
+        // butt_pressed=element.id;
+        // var butt_pressed=0; 
+        console.log("Button : "+butt_pressed);
+
+        var index=butt_pressed.replace('buttock_depo_edit-','');
+        console.log(index);
+        
+        var URL="{% url 'edit_goal' %}"
+        var $crf_token = $('[name="csrfmiddlewaretoken"]').attr('value');
+        
+        // console.log(JSON.parse("{{dataval|escapejs}}"));
+        var data = JSON.parse("{{dataval|escapejs}}");
+		// var i;
+        
+
+        goalID=data[index-1]["Goal_id"];
+        var data = {'index': goalID, 'update_goal': update_goal, 'update_goal_desc':update_goal_desc,'update_goal_amount':update_goal_amount,'update_goal_date':update_goal_date,'csrfmiddlewaretoken':$crf_token};
+
+            $.post(URL, data);
+
+             }  
+
+
 
 
 

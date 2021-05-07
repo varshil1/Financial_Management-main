@@ -204,8 +204,9 @@ def AddIncome(request):
                     print("sucess not")
             try:
                 save_income=income()
-                #user_count=SignUp_details.objects.raw("SELECT COUNT(*) FROM signup_details;")
-                #saverecord.user_id=int(user_count)+1
+                user_count=income.objects.all().count()
+                save_income.id=int(user_count)+1
+                # save_income.id=
                 save_income.user_id=u_id
                 save_income.Amount=inc_amount
                 save_income.Date_time=inc_date

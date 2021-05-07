@@ -7,6 +7,7 @@ from django.db import models
    # class Meta:
   #      db_table="employee"
 class income(models.Model):
+  id=models.IntegerField(primary_key=True)
   user_id=models.IntegerField()
   Amount=models.IntegerField()
   Date_time=models.DateTimeField()
@@ -17,12 +18,14 @@ class income(models.Model):
 
 
 class expense(models.Model):
+  
   user_id=models.IntegerField()
   Amount=models.IntegerField()
   Date_time=models.DateTimeField()
   Type=models.CharField(max_length=50)
   Expense_id=models.AutoField(primary_key=True)
   detail=models.TextField()
+  worth=models.CharField(max_length=5)
   class Meta:
     db_table="expense"
 
@@ -41,6 +44,7 @@ class Goals(models.Model):
   Amount_to_save=models.IntegerField()
   amount_till_now=models.IntegerField()
   Active=models.BooleanField()
+  description=models.CharField(max_length=1000)
   Goal_deadline=models.DateTimeField()
   class Meta:
      db_table="Goals"

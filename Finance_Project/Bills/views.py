@@ -32,6 +32,7 @@ def showBill(request):
     storage.used = True
     import datetime
     today=datetime.date.today()
+    U_name=request.session["User_name"]
     if request.method=='POST' and 'date_submit' in request.POST:
     # if request.method=='POST':
         print("hey")
@@ -76,7 +77,7 @@ def showBill(request):
             }
         result_list = list(user_bill_details2.values('Bill_id'))
         results2_JSON=json.dumps(result_list)
-        return render(request,'viewBills.html',{'bills': user_bill_details,'bill_active':user_bill_details2,'dataval':results2_JSON})
+        return render(request,'viewBills.html',{'bills': user_bill_details,'bill_active':user_bill_details2,'dataval':results2_JSON,'UserName':U_name})
 
 
 @csrf_exempt
@@ -98,3 +99,74 @@ def delete(request):
 
     a.save()
     return HttpResponse("Success")
+
+
+
+def AddBills(request):
+    if request.method=='POST' and 'Bills' in request.POST:
+            # from __main__ import *
+            # u_id = U_id
+            # count_income=income.objects.raw("SELECT COUNT(*) FROM income;")
+            # inc_id = count_income+1
+            #print(inc_id)
+            u_id=request.session.get("User_id")
+            print("Are we getting it??")
+            print(u_id)
+            bill_amount=int(request.POST.get('Bill_amount'))
+            
+            print(bill_amount)
+
+            bill_date=request.POST.get('Bill_date')
+            bill_type=request.POST.get('Bill_type')
+            bill_desc=request.POST.get('Bill_desc')
+            print(bill_desc)
+            print(bill_date)
+            print('YESSSSS')
+            try:
+                if is_valid(bill_amount):
+                    messages.success(request,'Income added successfully')
+                    print("sucess")
+            except ValueError as e:
+                    messages.error(request,''+ str(e))
+                    print("sucess not")
+            try:
+                save_bill=bill()
+                #user_count=SignUp_details.objects.raw("SELECT COUNT(*) FROM signup_details;")
+                #saverecord.user_id=int(user_count)+1
+                user_count=bill.objects.all().count()
+                save_bill.Bill_id=int(user_count)+1
+            
+                
+                save_bill.user_id=u_id
+                save_bill.Bill_Amount=bill_amount
+                save_bill.Due_date=bill_date
+                save_bill.Bill_type=bill_type
+                save_bill.Details=bill_desc
+                save_bill.Bill_Active=True
+                save_bill.save()
+                
+                messages.success(request,'Bills added successfully!!!')
+                #sweetify.success(request, 'You did it', text='Good job! You successfully showed a SweetAlert message', persistent='Hell yeah')
+                #return render(request,'addBill.html')
+                print("sucess")
+                return render(request,'addBill.html')
+            except ValueError as e:
+                print(e)
+                return render(request,'addBill.html')
+
+    else :
+        return render(request,'addBill.html')
+
+def is_valid(bill_amount):
+    amount_reason = amount_valid(bill_amount)
+    if not amount_reason == '':
+        raise ValueError(amount_reason)
+    return False
+
+
+def amount_valid(bill_amount):
+    if bill_amount < 0 :
+        reason=('Amount entered is not valid.')
+        return '',reason
+    else:
+        return ''

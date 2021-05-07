@@ -33,9 +33,12 @@ urlpatterns = [
     url('viewIncome',v_inc.showIncome,name='viewIncome'),
     url('viewGoal',v_goal.showGoal,name='viewGoal'),
     url('viewBill',v_bill.showBill,name='viewBill'),
+    url('addGoal',v_goal.AddGoal,name='addGoal'),
+    url('addBill',v_bill.AddBills,name='addBill'),
     path('notification/',v_goal.Unread,name='Unread'),
     path('notification2/',v_goal.delete,name='del'),
     path('notification3/',v_bill.delete,name='bill_del'),
+    path('notification4/',v_goal.Update,name='edit_goal'),
     path('ajax/getData',v1.getData,name='getData'),
     path('pdf_download/<name>/', GeneratePdf.as_view(template_name='viewGoal.html') , name='pdf_download'),
 ]

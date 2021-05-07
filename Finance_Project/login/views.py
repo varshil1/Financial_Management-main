@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from login.models import Employee
 from login.models import SignUp_details
-from Finance_Project.models import Goals,expense,income
+from Finance_Project.models import Goals,expense,income,Bills
 from django.contrib import messages
 import json
 from django.db.models import Sum
@@ -9,7 +9,6 @@ from django.http import HttpResponseRedirect
 from heapq import nlargest
 from django.http import HttpResponse
 from django.shortcuts import redirect
-
 
 
 import calendar
@@ -47,6 +46,7 @@ def login(request):
 def UserLogin(request):
     storage = messages.get_messages(request)
     storage.used = True
+    
     if request.method=='POST' and 'login' in request.POST:
         
         uname_given=request.POST.get('username_log')
@@ -63,6 +63,8 @@ def UserLogin(request):
             # messages.success(request,'Login successfully')
             U_id = SignUp_details.objects.get(user_name=uname_given).user_id
             request.session["User_id"]=U_id
+            request.session["User_name"]=uname_given
+            
             # Goal chart and calculations
             user_goals_details=Goals.objects.filter(user_id=U_id,Active=True)
             user_goals_names=[]
@@ -314,7 +316,8 @@ def UserLogin(request):
             # print(t2)
 
 
-
+            user_bill_details_temp=Bills.objects.filter(user_id=U_id,Bill_Active=True).order_by('Due_date')
+        
             results2={
             "data_goals":user_goals_perc,
             "labels_goals":user_goals_names,
@@ -328,15 +331,22 @@ def UserLogin(request):
             "user_inc_mon_amount":user_inc_mon_amount,
             "user_exp_daily_amount":user_exp_daily_amount,
             "user_inc_daily_amount":user_inc_daily_amount,
+            
             "labels_inc":user_inc_names,
             "current_user":uname_given,
             "current_user_id":U_id
             }
             
             results2_JSON=json.dumps(results2)
-            return render(request,'index_2.html',{"dataval":results2_JSON})
+            user_bill_details=Bills.objects.filter(user_id=U_id,Bill_Active=True).order_by('Due_date')[:3]
+            
+            result_list = list(user_bill_details_temp.values('Bill_id'))
+            results3_JSON=json.dumps(result_list)
+            
+            return render(request,'index_2.html',{"dataval":results2_JSON,"bill_details":user_bill_details,"dataval2":results3_JSON})
         else:
             messages.error(request,'Login unsuccessfully')
+           
             return render(request,'login.html')
         
         
@@ -352,6 +362,7 @@ def UserLogin(request):
             temp=is_valid(user_name,first_name,last_name,mobile_no,email_id,password)
             if temp==None:
                 messages.success(request,'Register successfully')
+                print("helu")
                 # return render(request,'login.html')
                 flag=1
             else:
@@ -366,7 +377,7 @@ def UserLogin(request):
                     messages.error(request,'Register unsuccessfully:'+ str(a))
                     print(str(a))
 
-                
+        print(flag)
                 # return render(request,'login.html')
         if flag==1:
             try:
@@ -377,13 +388,16 @@ def UserLogin(request):
                 saverecord.first_name=first_name
                 saverecord.last_name=last_name
                 saverecord.mobile_no=mobile_no
+                
                 saverecord.email_id=email_id
                 saverecord.password=password
                 saverecord.save()
+                print('saved')
                 messages.success(request,'Registered successfully!!!')
-                return render(request,'log.html')
-            except:
-                return render(request,'index.html')
+                return render(request,'login.html')
+            except :
+                print('Hellll')
+                return render(request,'login.html')
         
     else:
         return render(request,'login.html')
@@ -507,7 +521,7 @@ def email_valid(email_id):
  
     # pass the regular expression
     # and the string in search() method
-    if(re.search(regex, email)):
+    if(re.search(regex, email_id)):
         return True
  
     else:

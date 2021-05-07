@@ -9,7 +9,7 @@
   <title>Kapella Bootstrap Admin Dashboard Template</title>
   <!-- base:css -->
   <link rel="stylesheet" href="{% static "vendors/mdi/css/materialdesignicons.min.css" %}">
-  <link rel="stylesheet" href="{% static "vendors/base/vendor.bundle.base.css"  %}">
+  <link rel="stylesheet" href="{% static "vendors/base/vendor.bundle.base.css" %}">
   <!-- endinject -->
   <!-- plugin css for this page -->
   <link rel="stylesheet" href="{% static "vendors/select2/select2.min.css" %}">
@@ -18,7 +18,7 @@
   <!-- inject:css -->
   <link rel="stylesheet" href="{% static "css/style.css" %}">
   <!-- endinject -->
-  <link rel="shortcut icon" href="{% static "images/favicon.png" %}"/>
+  <link rel="shortcut icon" href="{% static "images/favicon.png" %}" />
 </head>
 
 <body>
@@ -138,9 +138,9 @@
                 <input type="text" class="form-control" placeholder="search" aria-label="search" aria-describedby="search">
             </div>
           </li>	
-        </ul> -->  
+        </ul> -->
                     <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-                        <a class="navbar-brand brand-logo" href="{% static "index.html" %}"><img src="{% static "images/logo.svg" %}"
+                        <a class="navbar-brand brand-logo" href="{% static "index.html" %}" ><img src="{% static "images/logo.svg" %}"
                                 alt="logo" /></a>
                         <a class="navbar-brand brand-logo-mini" href="{% static "index.html" %}"><img src="{% static "images/logo-mini.svg" %}"
                                 alt="logo" /></a>
@@ -175,7 +175,7 @@
                                 id="profileDropdown">
                                 <span class="nav-profile-name">Johnson</span>
                                 <span class="online-status"></span>
-                                <img src="{% static "images/faces/face28.png" %}"alt="profile" />
+                                <img src="{% static "images/faces/face28.png" %}" alt="profile" />
                             </a>
                             <div class="dropdown-menu dropdown-menu-right navbar-dropdown"
                                 aria-labelledby="profileDropdown">
@@ -200,42 +200,42 @@
         <nav class="bottom-navbar">
             <div class="container">
                 <ul class="nav page-navigation">
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <i class="mdi mdi-view-list" style="font-size: 28px;"></i>
-                            <span class="menu-title">Dashboard</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="mdi mdi-trending-up" style="font-size: 28px;"></i>
-                            <span class="menu-title">Income</span>
-                            <i class="menu-arrow"></i>
-                        </a>
-                        <div class="submenu">
-                            <ul>
-                                <li class="nav-item"><a class="nav-link" href="{% url 'addIncome' %}">Add
-                                        Income</a></li>
-                                <!-- <li class="nav-item"><a class="nav-link" href="pages/ui-features/typography.html">View Income</a></li> -->
-                                <li class="nav-item"><a class="nav-link"
-                                        href="{% url 'viewIncome' %}">View Income Statement</a></li>
-
-                            </ul>
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{% static "pages/forms/basic_elements.html" %}" class="nav-link">
-                            <i class="mdi mdi-trending-down" style="font-size: 28px;"></i>
-                            <span class="menu-title">Expense</span>
-                            <i class="menu-arrow"></i>
-                        </a>
-                        <div class="submenu">
-                            <ul>
-                                <li class="nav-item"><a class="nav-link" href="{% url 'addExpense' %}">Add Expense</a></li>
-                                <!-- <li class="nav-item"><a class="nav-link" href="#">View Expense</a></li> -->
-                                <li class="nav-item"><a class="nav-link" href="{% url 'viewExpense' %}">View Expense Statement</a></li>
-
-                            </ul>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <i class="mdi mdi-view-list" style="font-size: 28px;"></i>
+                        <span class="menu-title">Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="mdi mdi-trending-up" style="font-size: 28px;"></i>
+                        <span class="menu-title">Income</span>
+                        <i class="menu-arrow"></i>
+                    </a>
+                    <div class="submenu">
+                        <ul>
+                            <li class="nav-item"><a class="nav-link" href="{% url 'addIncome' %}">Add
+                                    Income</a></li>
+                            <!-- <li class="nav-item"><a class="nav-link" href="pages/ui-features/typography.html">View Income</a></li> -->
+                            <li class="nav-item"><a class="nav-link"
+                                    href="{% url 'viewIncome' %}">View Income Statement</a></li>
+      
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a href="{% static "pages/forms/basic_elements.html" %}" class="nav-link">
+                        <i class="mdi mdi-trending-down" style="font-size: 28px;"></i>
+                        <span class="menu-title">Expense</span>
+                        <i class="menu-arrow"></i>
+                    </a>
+                    <div class="submenu">
+                        <ul>
+                            <li class="nav-item"><a class="nav-link" href="{% url 'addExpense' %}">Add Expense</a></li>
+                            <!-- <li class="nav-item"><a class="nav-link" href="#">View Expense</a></li> -->
+                            <li class="nav-item"><a class="nav-link" href="{% url 'viewExpense' %}">View Expense Statement</a></li>
+      
+                          </ul>
                         </div>
                     </li>
                     <!-- <li class="nav-item">
@@ -274,119 +274,84 @@
         
                         </ul>
                       </div>
-                    </li>
-                    <!-- <li class="nav-item">
-                        <a href="{% static "pages/icons/mdi.html" %}" class="nav-link">
-                            <i class="mdi mdi-emoticon menu-icon"></i>
-                            <span class="menu-title">Additional Feature </span>
-                            <i class="menu-arrow"></i>
-                        </a>
-                    </li> -->
-                    <!-- <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="mdi mdi-codepen menu-icon"></i>
-                            <span class="menu-title">Additional Feature</span>
-                            <i class="menu-arrow"></i>
-                        </a>
-                        <div class="submenu">
-                            <ul class="submenu-item">
-                                <li class="nav-item"><a class="nav-link" href="{% static "pages/samples/login.html" %}">Login</a>
-                                </li>
-                                <li class="nav-item"><a class="nav-link" href="{% static "pages/samples/login-2.html" %}">Login
-                                        2</a></li>
-                                <li class="nav-item"><a class="nav-link"
-                                        href="{% static "pages/samples/register.html" %}">Register</a></li>
-                                <li class="nav-item"><a class="nav-link"
-                                        href="{% static "pages/samples/register-2.html" %}">Register 2</a></li>
-                                <li class="nav-item"><a class="nav-link"
-                                        href="{% static "pages/samples/lock-screen.html" %}">Lockscreen</a></li>
-                            </ul>
-                        </div>
-                    </li> -->
-                    <!-- <li class="nav-item">
-              <a href="docs/documentation.html" class="nav-link">
-                <i class="mdi mdi-file-document-box-outline menu-icon"></i>
-                <span class="menu-title">Documentation</span></a>
-          </li> -->
+                    </li>  
+                      
+                      <!-- <li class="nav-item">
+                  <a href="docs/documentation.html" class="nav-link">
+                    <i class="mdi mdi-file-document-box-outline menu-icon"></i>
+                    <span class="menu-title">Documentation</span></a>
+              </li> -->
+      
                 </ul>
             </div>
         </nav>
     </div>
-        
-    <!-- CHANGES FOR CENTER FORMAT-->
-    <div class="container-fluid page-body-wrapper">
-      <div class="main-panel">
-        <div class="content-wrapper">
-          <div class="row">
-            <div class="col-md-6 grid-margin stretch-card" style="margin: auto;">
-              <div class="card">
-                <div class="card-body">
-                  <h4 class="card-title">Add Income</h4>
-                  <!-- <p class="card-description">
-                    Basic form layout
-                  </p> -->
-                  <form class="forms-sample" method="POST">
-                    {% csrf_token %}
-                    <div class="form-group">
-                      <label for="exampleInputName1">Income:</label>
-                      <span style="font-family:Arial; ">&#8377;</span>
-                      <input type="text" class="form-control" name="Income_Amount"  placeholder="Enter Amount" required>
+        <!-- partial -->
+        <div class="container-fluid page-body-wrapper">
+          <div class="main-panel">
+            <div class="content-wrapper">
+              <div class="row">
+                <div class="col-md-6 grid-margin stretch-card" style="margin: auto;">
+                  <div class="card">
+                    <div class="card-body">
+                      <h4 class="card-title">Set Future Goal</h4>
+                      <!-- <p class="card-description">
+                        Basic form layout
+                      </p> -->
+                      <form class="forms-sample" method="POST">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="exampleIncomeCategory">Enter Your Goal</label>
+                      <input type="text" class="form-control" name="Goal_name" placeholder="Enter Goal" required>
+                        
+                            </div>
+                          <div class="form-group">
+                            <!-- <label for="exampleInputUsername1">Username</label>
+                            <input type="text" class="form-control" id="exampleInputUsername1" placeholder="Username"> -->
+      
+                            <label for="exampleInputDescription">Description</label>
+                            <input type="text" class="form-control" name="Goal_desc" placeholder="Enter Description about Goal" required>
+                          </div>
+                        <div class="form-group">
+                          <label for="exampleInputName1">Enter Amount:</label>
+                          <span	style="font-family:Arial; ">&#8377;</span>
+                          <input type="text" class="form-control" name="Goal_amount" placeholder="Enter Amount" required>
+                        </div>
+                        <div class="form-group">
+                          <label for="exampleInputDate">Goal Deadline</label>
+                          <input type="date" class="form-control" name="Goal_date" required>                                      
+                             </div>
+                       
+                      
+                                
+                        <button type="submit" class="btn btn-primary mr-2" name="Goals">Submit</button>
+                        <button class="btn btn-light">Cancel</button>
+                      </form>
                     </div>
-                    <div class="form-group">
-                      <label for="exampleInputDate">Date</label>
-                      <input type="date" class="form-control" name="Income_date" placeholder="Date of Income" required>                                      
-                         </div>
-                    <div class="form-group">
-                      <label for="exampleIncomeCategory">Select Income Category</label>
-                        <select class="form-control" name="Income_Type" required>
-                          <option>Salary</option>
-                          <option>Rental</option>
-                          <option>Business</option>
-                          <option>Allowances</option>
-                          <option>Others..</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                      <!-- <label for="exampleInputUsername1">Username</label>
-                      <input type="text" class="form-control" id="exampleInputUsername1" placeholder="Username"> -->
-
-                      <label for="exampleInputDescription">Description</label>
-                      <input type="text" class="form-control" name="Income_desc" placeholder="Enter Description about Income" required>
-                    </div>
-                            
-                    <button type="submit" class="btn btn-primary mr-2" name="Income">Submit</button>
-                    <button class="btn btn-light">Cancel</button>
-                  </form>
+                  </div>
                 </div>
+              
+                
               </div>
             </div>
-          
-            
+            <!-- content-wrapper ends -->
+            <!-- partial:../../partials/_footer.html -->
+            <!-- <footer class="footer">
+              <div class="footer-wrap">
+                <div class="d-sm-flex justify-content-center justify-content-sm-between">
+                  <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">Copyright © bootstrapdash.com 2020</span>
+                  <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center"> Free <a href="https://www.bootstrapdash.com/" target="_blank">Bootstrap dashboard templates</a> from Bootstrapdash.com</span>
+                </div>
+              </div>
+            </footer> -->
+            <!-- partial -->
           </div>
+          <!-- main-panel ends -->
         </div>
-        <!-- content-wrapper ends -->
-        <!-- partial:../../partials/_footer.html -->
-        <!-- <footer class="footer">
-          <div class="footer-wrap">
-            <div class="d-sm-flex justify-content-center justify-content-sm-between">
-              <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">Copyright © bootstrapdash.com 2020</span>
-              <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center"> Free <a href="https://www.bootstrapdash.com/" target="_blank">Bootstrap dashboard templates</a> from Bootstrapdash.com</span>
-            </div>
-          </div>
-        </footer> -->
-        <!-- partial -->
-      </div>
-      <!-- main-panel ends -->
-    </div>
-
     <!-- page-body-wrapper ends -->
   </div>
   <!-- container-scroller -->
-  <script>
-    console.log("Here");
-    console.log(sessionStorage.getItem("User_id"));
-    sessionStorage.setItem("User_id2",sessionStorage.getItem("User_id"));
-  </script>
+  
   <!-- base:js -->
   <script src="{% static "vendors/base/vendor.bundle.base.js" %}"></script>
   <!-- endinject -->
@@ -398,14 +363,14 @@
 
   
   <!-- plugin js for this page -->
-  <script src="{% static "vendors/typeahead.js/typeahead.bundle.min.js" %}"></script>
-  <script src="{% static "vendors/select2/select2.min.js" %}"></script>
+  <script src="{% static "vendors/typeahead.js/typeahead.bundle.min.js" %}" ></script>
+  <script src="{% static "vendors/select2/select2.min.js" %}" ></script>
   <!-- End plugin js for this page -->
   <!-- Custom js for this page-->
   <!-- <script src="../../js/file-upload.js"></script> -->
 
-  <script src="{% static "js/typeahead.js" %}"></script>
-  <script src="{% static "js/select2.js" %}"></script>
+  <script src="{% static "js/typeahead.js" %}" ></script>
+  <script src="{% static "js/select2.js" %}" ></script>
   
   <!-- End custom js for this page-->
 
