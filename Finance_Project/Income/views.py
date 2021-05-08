@@ -95,12 +95,14 @@ def showIncome(request):
 
 
         
+        U_name=request.session["User_name"]
         results2={
             "user_inc_mon_num":user_inc_mon_num,
             "user_inc_mon_amount":user_inc_mon_amount,
             "user_income_names":user_income_names,
             "user_income_perc":user_income_perc,
-            "current_user_id":U_id
+            "current_user_id":U_id,
+            "current_user": U_name
             }
         
         
@@ -111,6 +113,7 @@ def showIncome(request):
     else:
         print("HEYYYYYYYYYYY")
         U_id=request.session.get("User_id")
+        U_name=request.session["User_name"]
         user_income_details1=income.objects.filter(user_id=U_id,Date_time__year=today.year).order_by('Date_time')
         user_income_details=income.objects.filter(user_id=U_id).order_by('Date_time')
         print(user_income_details)
@@ -167,7 +170,8 @@ def showIncome(request):
             "user_inc_mon_amount":user_inc_mon_amount,
             "user_income_names":user_income_names,
             "user_income_perc":user_income_perc,
-            "current_user_id":U_id
+            "current_user_id":U_id,
+            "current_user":U_name
             }
             
         results2_JSON=json.dumps(results2)
@@ -183,8 +187,11 @@ def AddIncome(request):
             # inc_id = count_income+1
             #print(inc_id)
             u_id=request.session.get("User_id")
+            
             print("Are we getting it??")
             print(u_id)
+
+            
             inc_amount=int(request.POST.get('Income_Amount'))
             
             print(inc_amount)
@@ -195,6 +202,15 @@ def AddIncome(request):
             print(inc_desc)
             print(inc_date)
             print('YESSSSS')
+            
+            U_name=request.session["User_name"]
+            
+            results2={
+            "current_user_id":u_id,
+            "current_user":U_name
+            }
+            
+            results2_JSON=json.dumps(results2)
             try:
                 if is_valid(inc_amount):
                     messages.success(request,'Income added successfully')
@@ -215,13 +231,22 @@ def AddIncome(request):
                 save_income.save()
                 messages.success(request,'Income added successfully!!!')
                 print("sucess")
-                return render(request,'addIncome.html')
+                return render(request,'addIncome.html',{'dataval':results2_JSON})
             except ValueError as e:
                 print(e)
-                return render(request,'addIncome.html')
+                return render(request,'addIncome.html',{'dataval':results2_JSON})
 
     else :
-        return render(request,'addIncome.html')
+        u_id=request.session.get("User_id")
+
+        U_name=request.session["User_name"]
+        results2={
+            "current_user_id":u_id,
+            "current_user":U_name
+            }
+            
+        results2_JSON=json.dumps(results2)
+        return render(request,'addIncome.html',{'dataval':results2_JSON})
 
 def is_valid(inc_amount):
     amount_reason = amount_valid(inc_amount)

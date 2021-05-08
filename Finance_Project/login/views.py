@@ -184,12 +184,24 @@ def UserLogin(request):
             #     print(x)
 
             # Income ends
-
+            
             # Total details
-            user_inc_total=int(income.objects.filter(user_id=U_id).aggregate(Sum('Amount'))['Amount__sum'])
-            user_exp_total=int(expense.objects.filter(user_id=U_id).aggregate(Sum('Amount'))['Amount__sum']) 
+            if income.objects.filter(user_id=U_id).aggregate(Sum('Amount'))['Amount__sum'] is None:
+                user_inc_total=0
+            else:
+                user_inc_total=int(income.objects.filter(user_id=U_id).aggregate(Sum('Amount'))['Amount__sum'])
+
+
+            
+            if expense.objects.filter(user_id=U_id).aggregate(Sum('Amount'))['Amount__sum'] is None:
+                user_exp_total=0
+            else:
+                user_exp_total=int(expense.objects.filter(user_id=U_id).aggregate(Sum('Amount'))['Amount__sum']) 
+            
             user_acc_balance= user_inc_total-user_exp_total if user_inc_total>=user_exp_total else 0
 
+            
+            
             print(str(user_exp_total)+' '+str(user_inc_total)+' '+str(user_acc_balance))
 
 
@@ -317,7 +329,42 @@ def UserLogin(request):
 
 
             user_bill_details_temp=Bills.objects.filter(user_id=U_id,Bill_Active=True).order_by('Due_date')
-        
+
+            if expense.objects.filter(user_id=U_id,worth='yes').aggregate(total_price=Sum('Amount'))["total_price"] is None:
+                user_exp_worth_yes=0
+            else:
+                user_exp_worth_yes=int(expense.objects.filter(user_id=U_id,worth='yes').aggregate(total_price=Sum('Amount'))["total_price"])
+            
+
+            if expense.objects.filter(user_id=U_id,worth='no').aggregate(total_price=Sum('Amount'))["total_price"] is None:
+                user_exp_worth_no=0
+            else:
+                user_exp_worth_no=int(expense.objects.filter(user_id=U_id,worth='no').aggregate(total_price=Sum('Amount'))["total_price"])
+            
+            user_exp_worth_total=user_exp_worth_yes+user_exp_worth_no
+            #print(user_exp_worth_yes)
+            #print(user_exp_worth_no)
+            print(user_exp_worth_total)
+            if user_exp_worth_total==0:
+                user_exp_worth_yes_per=0
+            else:
+                user_exp_worth_yes_per=(user_exp_worth_yes/user_exp_worth_total)*100
+
+            
+            print(user_exp_worth_yes_per)
+            worthy_message=''
+            if user_exp_worth_yes_per>75:
+                worthy_message='Congratulations! You are a wise spender and avoid unnecessary expenses. Your worthy expenses are '+str(round(user_exp_worth_yes_per,2))
+            elif user_exp_worth_yes_per>=50 and user_exp_worth_yes_per<75:
+                worthy_message=' Congratulations! More than half of your expenses are worthy. Keep it up. Your worthy expenses are '+str(round(user_exp_worth_yes_per,2))
+            elif user_exp_worth_yes_per>=25 and user_exp_worth_yes_per<50:
+                worthy_message='Be careful! More than half of your expenses are unnecessary. Please spend wisely. Your worthy expenses are '+str(round(user_exp_worth_yes_per,2))
+            elif user_exp_worth_yes_per>0 and user_exp_worth_yes_per<25:
+                worthy_message='Alert! Your unnecessary expenses are way too high. Please take care and avoid them. Your worthy expenses are '+str(round(user_exp_worth_yes_per,2))
+            else :
+                worthy_message='ADD EXPENSES TO CHECK YOUR STATUS'
+
+            print(worthy_message)
             results2={
             "data_goals":user_goals_perc,
             "labels_goals":user_goals_names,
@@ -331,7 +378,7 @@ def UserLogin(request):
             "user_inc_mon_amount":user_inc_mon_amount,
             "user_exp_daily_amount":user_exp_daily_amount,
             "user_inc_daily_amount":user_inc_daily_amount,
-            
+            "worthy_expenses":worthy_message,
             "labels_inc":user_inc_names,
             "current_user":uname_given,
             "current_user_id":U_id

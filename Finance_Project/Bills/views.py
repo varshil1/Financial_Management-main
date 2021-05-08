@@ -60,7 +60,15 @@ def showBill(request):
             }
         result_list = list(user_bill_details2.values('Bill_id'))
         results2_JSON=json.dumps(result_list)
-        return render(request,'viewBills.html',{'bills': user_bill_details,'bill_active':user_bill_details2,'dataval':results2_JSON})
+
+        U_name=request.session["User_name"]
+        
+        results2_u={
+            "current_user":U_name
+            }
+            
+        results2_JSONu=json.dumps(results2_u)
+        return render(request,'viewBills.html',{'bills': user_bill_details,'bill_active':user_bill_details2,'dataval':results2_JSON,'datavalu':results2_JSONu})
         # return render(request,'viewBills.html',{'bills': user_bill_details,'bill_active':user_bill_details2})
     
     
@@ -77,7 +85,14 @@ def showBill(request):
             }
         result_list = list(user_bill_details2.values('Bill_id'))
         results2_JSON=json.dumps(result_list)
-        return render(request,'viewBills.html',{'bills': user_bill_details,'bill_active':user_bill_details2,'dataval':results2_JSON,'UserName':U_name})
+        U_name=request.session["User_name"]
+        
+        results2_u={
+            "current_user":U_name
+            }
+            
+        results2_JSONu=json.dumps(results2_u)
+        return render(request,'viewBills.html',{'bills': user_bill_details,'bill_active':user_bill_details2,'dataval':results2_JSON,'datavalu':results2_JSONu,'UserName':U_name})
 
 
 @csrf_exempt
@@ -122,6 +137,14 @@ def AddBills(request):
             print(bill_desc)
             print(bill_date)
             print('YESSSSS')
+            U_name=request.session["User_name"]
+            
+            results2={
+            "current_user_id":u_id,
+            "current_user":U_name
+            }
+            
+            results2_JSON=json.dumps(results2)
             try:
                 if is_valid(bill_amount):
                     messages.success(request,'Income added successfully')
@@ -149,13 +172,22 @@ def AddBills(request):
                 #sweetify.success(request, 'You did it', text='Good job! You successfully showed a SweetAlert message', persistent='Hell yeah')
                 #return render(request,'addBill.html')
                 print("sucess")
-                return render(request,'addBill.html')
+                return render(request,'addBill.html',{'dataval':results2_JSON})
             except ValueError as e:
                 print(e)
-                return render(request,'addBill.html')
+                return render(request,'addBill.html',{'dataval':results2_JSON})
 
     else :
-        return render(request,'addBill.html')
+        u_id=request.session.get("User_id")
+
+        U_name=request.session["User_name"]
+        results2={
+            "current_user_id":u_id,
+            "current_user":U_name
+            }
+            
+        results2_JSON=json.dumps(results2)
+        return render(request,'addBill.html',{'dataval':results2_JSON})
 
 def is_valid(bill_amount):
     amount_reason = amount_valid(bill_amount)

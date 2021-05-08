@@ -17,6 +17,8 @@
 	<link rel="stylesheet" href="{% static "css/style.css" %}">
 	<!-- endinject -->
 	<link rel="shortcut icon" href="{% static "images/favicon.png" %}" />
+	
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.js"></script>
 </head>
 
 <body>
@@ -160,9 +162,9 @@
             </ul> 
 		"{% static "css/login.css" %}"-->
 						<div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-							<a class="navbar-brand brand-logo" href="{% static "index.html" %}"><img src="{% static "images/logo.svg" %}"
+							<a class="navbar-brand brand-logo" href="{% static "index.html" %}"><img src="{% static "images/logo.png" %}"
 									alt="logo" /></a>
-							<a class="navbar-brand brand-logo-mini" href="index.html"><img src="{% static "images/logo-mini.svg" %}"
+							<a class="navbar-brand brand-logo-mini" href="{% static "index.html" %}"><img src="{% static "images/logo-mini.png" %}"
 									alt="logo" /></a>
 						</div>
 						<ul class="navbar-nav navbar-nav-right">
@@ -178,8 +180,9 @@
 									aria-labelledby="nreportDropdown">
 									<p class="mb-0 font-weight-medium float-left dropdown-header">Reports</p>
 									<a class="dropdown-item">
-										<i class="mdi mdi-file-pdf text-primary"></i>
-										Pdf
+										<button type="button" id="downloadpdf" style="cursor: pointer; border: none;"> <i class="mdi mdi-file-pdf text-primary"></i>Pdf
+										</button>
+										
 									</a>
 									<!-- <a class="dropdown-item">
 										<i class="mdi mdi-file-excel text-primary"></i>
@@ -203,7 +206,7 @@
 										<i class="mdi mdi-settings text-primary"></i>
 										Settings
 									</a> -->
-									<a class="dropdown-item">
+									<a class="dropdown-item" href="{% url 'index' %}">
 										<i class="mdi mdi-logout text-primary"></i>
 										Logout
 									</a>
@@ -244,7 +247,7 @@
 							</div>
 						</li>
 						<li class="nav-item">
-							<a href="{% static "pages/forms/basic_elements.html" %}" class="nav-link">
+							<a href="#" class="nav-link">
 								<i class="mdi mdi-trending-down" style="font-size: 28px;"></i>
 								<span class="menu-title">Expense</span>
 								<i class="menu-arrow"></i>
@@ -283,7 +286,7 @@
 						
                         <li class="nav-item">
                             <a href="#" class="nav-link">
-                              <i class="mdi mdi-trophy-outline" style="font-size: 28px;"></i>
+                              <i class="mdi mdi-equal-box style="font-size: 28px;"></i>
                               <span class="menu-title">Bills</span>
                               <i class="menu-arrow"></i>
                             </a>
@@ -334,7 +337,7 @@
 			</nav>
 		</div>
 		<!-- partial -->
-		<div class="container-fluid page-body-wrapper">
+		<div class="container-fluid page-body-wrapper" id="invoice_pdf">
 			<div class="main-panel">
 				<div class="content-wrapper">
 					<div class="row">
@@ -385,8 +388,7 @@
 										<div class="col-lg-4">
 											<h4 class="card-title" >Goals</h4>
 											<canvas id="salesDifference"></canvas>
-											<p class="mt-3 mb-4 mb-lg-0">Lorem ipsum dolor sit amet,
-												consectetur adipisicing elit.
+											<p class="mt-3 mb-4 mb-lg-0">An overview of your goals which are near completion. We wish you all the luck in achieving them!
 											</p>
 										</div>
 										<div class="col-lg-5">
@@ -404,8 +406,7 @@
 													<canvas id="bestSellers"></canvas>
 												</div>
 											</div>
-											<p class="mt-3 mb-4 mb-lg-0">Lorem ipsum dolor sit amet,
-												consectetur adipisicing elit.
+											<p class="mt-3 mb-4 mb-lg-0">An overview of your expense by different categories. Undefined suggests that you haven't incurred expenses from that category.
 											</p>
 										</div>
 										<div class="col-lg-3">
@@ -437,8 +438,7 @@
 													</ul>
 												</div>
 											</div>
-											<p class="mb-0 mt-2">Lorem ipsum dolor sit amet,
-												consectetur adipisicing elit.
+											<p class="mb-0 mt-2">An overview of your income by different categories. Undefined suggests that you haven't earned income from that category.
 											</p>
 										</div>
 									</div>
@@ -449,11 +449,10 @@
 							<div class="card congratulation-bg text-center">
 								<div class="card-body pb-0">
 									<img src="{% static "images/dashboard/face29.png" %}" alt="">
-									<h2 class="mt-3 text-white mb-3 font-weight-bold">Congratulations
-										Johnson
+									<h2 class="mt-3 text-white mb-3 font-weight-bold" id="Cong_message">Congratulations
+										
 									</h2>
-									<p>You have done 57.6% more sales today.
-										Check your new badge in your profile.
+									<p id="worthy_expense">
 									</p>
 								</div>
 							</div>
@@ -490,7 +489,7 @@
 											<h2 id='tot_inc' class="text-dark mb-2 font-weight-bold"><span
 													style='font-family:Arial;'>&#8377;</span></h2>
 											<h4 class="card-title mb-2">Your Income</h4>
-											<small class="text-muted">APRIL 2019</small>
+											<!-- <small class="text-muted">APRIL 2019</small> -->
 										</div>
 									</div>
 								</div>
@@ -501,7 +500,7 @@
 											<h2 id='tot_exp' class="text-dark mb-2 font-weight-bold"><span
 													style='font-family:Arial;'>&#8377;</span></h2>
 											<h4 class="card-title mb-2">Your Expense</h4>
-											<small class="text-muted">APRIL 2019</small>
+											<!-- <small class="text-muted">APRIL 2019</small> -->
 										</div>
 									</div>
 								</div>
@@ -946,6 +945,96 @@
 	<script src= "{% static "vendors/chartjs-plugin-datalabels/chartjs-plugin-datalabels.js" %}"></script>
 	<script src= "{% static "vendors/justgage/raphael-2.1.4.min.js" %}"></script>
 	<script src= "{% static "vendors/justgage/justgage.js" %}"></script>
+	<script>
+		window.onload = function () {
+		document.getElementById("downloadpdf")
+			.addEventListener("click", () => {
+				const invoice = this.document.getElementById("invoice_pdf");
+				console.log(invoice);
+			console.log(window);
+			
+				var opt = {
+				  margin:0.00001,
+					filename: 'myfile.pdf',
+				 
+					html2canvas: { scale:1 },
+				  
+				   jsPDF: { unit: 'in', format: 'letter', orientation: 'landscape' }
+			 };
+			 
+			   html2pdf().from(invoice).set(opt).save();
+		   })    }
+	
+	//      function printPDF() { 
+	//    var element = document.getElementById('invoice');
+	//    element.style.display = 'block'  
+	//    html2pdf(element);  
+	//    conlose.log('printPDF()');
+	
+	//  }
+	/*
+	var doc = new jsPDF('p','pt','a4');
+	
+	   var specialElementHandlers = {
+		   '#hidediv': function (element, renderer) {
+			   return true;
+		   }
+	   };
+	
+	   $('#downloadpdf').click(function () {
+		   doc.fromHTML($('#invoice').html(), 15, 15, {
+			   'width': 200,
+				   'elementHandlers': specialElementHandlers
+			   
+				 });
+	   
+		   doc.save('sample-file.pdf');
+	   });
+	   */
+	
+	
+	   function demoFromHTML() {
+		  var pdf = new jsPDF('p', 'pt', 'letter');
+		  // source can be HTML-formatted string, or a reference
+		  // to an actual DOM element from which the text will be scraped.
+		  source = $('#invoice_pdf')[0];
+	
+		  // we support special element handlers. Register them with jQuery-style 
+		  // ID selector for either ID or node name. ("#iAmID", "div", "span" etc.)
+		  // There is no support for any other type of selectors 
+		  // (class, of compound) at this time.
+		  specialElementHandlers = {
+			  // element with id of "bypass" - jQuery style selector
+			  '#hidediv': function (element, renderer) {
+				  // true = "handled elsewhere, bypass text extraction"
+				  return true
+			  }
+		  };
+		  margins = {
+			  top: 80,
+			  bottom: 60,
+			  left: 40,
+			  width: 522
+		  };
+		  // all coords and widths are in jsPDF instance's declared units
+		  // 'inches' in this case
+		  pdf.fromHTML(
+		  source, // HTML string or DOM elem ref.
+		  margins.left, // x coord
+		  margins.top, { // y coord
+			  'width': margins.width, // max width of content on PDF
+			  'elementHandlers': specialElementHandlers
+		  },
+	
+		  function (dispose) {
+			  // dispose: object with X, Y of the last line add to the PDF 
+			  //          this allow the insertion of new lines after html
+			  pdf.save('Test.pdf');
+		  }, margins);
+	  }
+	  
+	  </script>
+	
 	
 	<!-- Custom js for this page-->
 	<script>
@@ -990,6 +1079,12 @@ var j=0;
 		
 		var user_prof=document.getElementById("User_TOP");
 		user_prof.innerHTML += data["current_user"];
+		
+		var user_cong=document.getElementById("Cong_message");
+		user_cong.innerHTML += data["current_user"];
+		
+		var user_worth=document.getElementById("worthy_expense");
+		user_worth.innerHTML += data["worthy_expenses"]+"%";
 		
 		// document.getElementById("myURL").name = "dashboard";
 		x1=data["data_goals"];
@@ -1078,7 +1173,7 @@ var j=0;
 			// labels: ["Marriage", "New-car", "Property", "Leh-ladakh trip", "Charity"],
 			labels: x2,
 			datasets: [{
-				label: 'Best Sellers',
+				label: '% Goals achieved',
 				// data: [22, 28, 18, 20, 12],
 				data: x1,
 				backgroundColor: [
@@ -1304,7 +1399,7 @@ var j=0;
 		var revenueChartData = {
 			labels: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10","11", "12", "13", "14", "15", "16", "17", "18", "19","20","21", "22", "23", "24", "25", "26", "27", "28", "29","30","31"],
 			datasets: [{
-				label: 'Income',
+				label: 'Income(in K)',
 				data: user_inc_daily_amount,
 				backgroundColor: [
 						'#0ddbb9',
@@ -1316,7 +1411,7 @@ var j=0;
 				fill: false,
 			},			
 			{
-				label: 'Expense',
+				label: 'Expense(in K)',
 				data: user_exp_daily_amount,
 				borderColor: [
 						'#ee5b5b',
@@ -2281,6 +2376,7 @@ var j=0;
     
 	<!-- End custom js for this page-->
 
+	
 </body>
 
 </html>

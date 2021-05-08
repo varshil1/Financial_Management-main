@@ -87,13 +87,15 @@ def showExpense(request):
             user_expenses_perc.append(temp_dict_exp[i])
 
 
+        U_name=request.session["User_name"]
         
         results2={
             "user_exp_mon_num":user_exp_mon_num,
             "user_exp_mon_amount":user_exp_mon_amount,
             "user_expenses_names":user_expenses_names,
             "user_expenses_perc":user_expenses_perc,
-            "current_user_id":U_id
+            "current_user_id":U_id,
+            "current_user":U_name
             }
         
         
@@ -154,13 +156,15 @@ def showExpense(request):
             user_expenses_perc.append(temp_dict_exp[i])
 
 
+        U_name=request.session["User_name"]
         
         results2={
             "user_exp_mon_num":user_exp_mon_num,
             "user_exp_mon_amount":user_exp_mon_amount,
             "user_expenses_names":user_expenses_names,
             "user_expenses_perc":user_expenses_perc,
-            "current_user_id":U_id
+            "current_user_id":U_id,
+            "current_user":U_name
             }
             
         results2_JSON=json.dumps(results2)
@@ -187,6 +191,14 @@ def AddExpense(request):
             print(exp_desc)
             print(exp_date)
             print('YESSSSS')
+            U_name=request.session["User_name"]
+            
+            results2={
+            "current_user_id":u_id,
+            "current_user":U_name
+            }
+            
+            results2_JSON=json.dumps(results2)
             try:
                 if is_valid(exp_amount):
                     messages.success(request,'Expense added successfully')
@@ -210,13 +222,22 @@ def AddExpense(request):
                 save_expense.save()
                 messages.success(request,'Expense added successfully!!!')
                 print("sucess")
-                return render(request,'addExpense.html')
+                return render(request,'addExpense.html',{'dataval':results2_JSON})
             except ValueError as e:
                 print(e)
-                return render(request,'addExpense.html')
+                return render(request,'addExpense.html',{'dataval':results2_JSON})
 
     else :
-        return render(request,'addExpense.html')
+        u_id=request.session.get("User_id")
+
+        U_name=request.session["User_name"]
+        results2={
+            "current_user_id":u_id,
+            "current_user":U_name
+            }
+            
+        results2_JSON=json.dumps(results2)
+        return render(request,'addExpense.html',{'dataval':results2_JSON})
 
 def is_valid(exp_amount):
     amount_reason = amount_valid(exp_amount)

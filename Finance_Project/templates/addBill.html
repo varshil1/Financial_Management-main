@@ -20,6 +20,7 @@
   <!-- endinject -->
   <link rel="shortcut icon" href="{% static "images/favicon.png" %}" />
   <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/sweetalert2@10.10.1/dist/sweetalert2.min.css'>
+  
 </head>
 
 <body>
@@ -141,16 +142,16 @@
           </li>	
         </ul> -->
                     <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-                        <a class="navbar-brand brand-logo" href="{% static "index.html" %}"><img src="{% static "images/logo.svg" %}"
+                        <a class="navbar-brand brand-logo" href="{% static "index.html" %}"><img src="{% static "images/logo.png" %}"
                                 alt="logo" /></a>
-                        <a class="navbar-brand brand-logo-mini" href="{% static "index.html" %}" ><img src="{% static "images/logo-mini.svg" %}"
+                        <a class="navbar-brand brand-logo-mini" href="{% static "index.html" %}" ><img src="{% static "images/logo-mini.png" %}"
                                 alt="logo" /></a>
                     </div>
                     <ul class="navbar-nav navbar-nav-right">
                         <!-- <li class="nav-item dropdown  d-lg-flex d-none">
               <button type="button" class="btn btn-inverse-primary btn-sm">Product </button>
             </li> -->
-                        <li class="nav-item dropdown d-lg-flex d-none">
+                        <!-- <li class="nav-item dropdown d-lg-flex d-none">
                             <a class="dropdown-toggle show-dropdown-arrow btn btn-inverse-primary btn-sm"
                                 id="nreportDropdown" href="#" data-toggle="dropdown">
                                 Reports
@@ -159,22 +160,20 @@
                                 aria-labelledby="nreportDropdown">
                                 <p class="mb-0 font-weight-medium float-left dropdown-header">Reports</p>
                                 <a class="dropdown-item">
-                                    <i class="mdi mdi-file-pdf text-primary"></i>
-                                    Pdf
+                                  <button type="button" id="downloadpdf" style="cursor: pointer; border: none;"> <i class="mdi mdi-file-pdf text-primary"></i>Pdf
+                                  </button>
+                                  
                                 </a>
-                                <!-- <a class="dropdown-item">
-                                    <i class="mdi mdi-file-excel text-primary"></i>
-                                    Exel
-                                </a> -->
+                                
                             </div>
-                        </li>
+                        </li> -->
                         <!-- <li class="nav-item dropdown d-lg-flex d-none">
               <button type="button" class="btn btn-inverse-primary btn-sm">Settings</button>
             </li> -->
                         <li class="nav-item nav-profile dropdown">
                             <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown"
                                 id="profileDropdown">
-                                <span class="nav-profile-name">Johnson</span>
+                                <span class="nav-profile-name" id="User_TOP"></span>
                                 <span class="online-status"></span>
                                 <img src="{% static "images/faces/face28.png" %}" alt="profile" />
                             </a>
@@ -184,7 +183,7 @@
                                     <i class="mdi mdi-settings text-primary"></i>
                                     Settings
                                 </a> -->
-                                <a class="dropdown-item">
+                                <a class="dropdown-item" href="{% url 'index' %}">
                                     <i class="mdi mdi-logout text-primary"></i>
                                     Logout
                                 </a>
@@ -225,7 +224,7 @@
                     </div>
                 </li>
                 <li class="nav-item">
-                    <a href="{% static "pages/forms/basic_elements.html" %}" class="nav-link">
+                    <a href="#" class="nav-link">
                         <i class="mdi mdi-trending-down" style="font-size: 28px;"></i>
                         <span class="menu-title">Expense</span>
                         <i class="menu-arrow"></i>
@@ -263,7 +262,7 @@
                     </li>
                     <li class="nav-item">
                       <a href="#" class="nav-link">
-                        <i class="mdi mdi-trophy-outline" style="font-size: 28px;"></i>
+                        <i class="mdi mdi-equal-box" style="font-size: 28px;"></i>
                         <span class="menu-title">Bills</span>
                         <i class="menu-arrow"></i>
                       </a>
@@ -366,7 +365,17 @@
   <script src="{% static "js/template.js" %}" ></script>
   <!-- endinject -->
 
-  
+  <script>
+    console.log("Here");
+    // console.log(sessionStorage.getItem("User_id"));
+    // sessionStorage.setItem("User_id2",sessionStorage.getItem("User_id"));
+    console.log(JSON.parse("{{dataval|escapejs}}"));
+        var data = JSON.parse("{{dataval|escapejs}}");
+        // var user_prof=document.getElementById("User_TOP");
+		    // user_prof.innerHTML += data["current_user"];
+    document.getElementById("User_TOP").innerHTML += data["current_user"];
+    console.log(data["current_user"]);
+  </script>
   <!-- plugin js for this page -->
   <script src="{% static "vendors/typeahead.js/typeahead.bundle.min.js" %}" ></script>
   <script src="{% static "vendors/select2/select2.min.js" %}" ></script>

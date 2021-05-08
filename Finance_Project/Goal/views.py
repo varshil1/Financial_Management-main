@@ -36,6 +36,7 @@ def showGoal(request):
         print(date_start)
         print(date_end)
         U_id=request.session.get("User_id")
+        U_name=request.session["User_name"]
         
         if date_end > date_start:
             pass
@@ -49,8 +50,15 @@ def showGoal(request):
         user_goal_details=goal.objects.filter(user_id=U_id,Goal_deadline__range=(date_start,date_end))
         user_goal_details2=goal.objects.filter(user_id=U_id,Active=True).order_by('Goal_deadline')
         print(user_goal_details)
+        U_name=request.session["User_name"]
+        
+        results2_u={
+            "current_user":U_name
+            }
+            
+        results2_JSONu=json.dumps(results2_u)
     # return render(request,'viewExpenseStat.html',{'expenses': user_expenses_details,"dataval":results2_JSON})
-        return render(request,'viewGoal.html',{'goals': user_goal_details,'goal_active':user_goal_details2})
+        return render(request,'viewGoal.html',{'goals': user_goal_details,'goal_active':user_goal_details2,'datavalu':results2_JSONu})
     
     
     else:
@@ -70,11 +78,17 @@ def showGoal(request):
 
         
         
+        U_name=request.session["User_name"]
         
-        
+        results2_u={
+            "current_user":U_name
+            }
+            
+        results2_JSONu=json.dumps(results2_u)
+
         result_list = list(user_goal_details2.values('Goal_id','rem','Goal_name','description','Amount_to_save','Goal_deadline'))
         results2_JSON=json.dumps(result_list,default=default)
-        return render(request,'viewGoal.html',{'goals': user_goal_details,'goal_active':user_goal_details2,'dataval':results2_JSON})
+        return render(request,'viewGoal.html',{'goals': user_goal_details,'goal_active':user_goal_details2,'dataval':results2_JSON,'datavalu':results2_JSONu})
 
 
 def default(o):
@@ -204,6 +218,16 @@ def AddGoal(request):
             print(goal_desc)
             print(goal_date)
             print('YESSSSS')
+
+            U_name=request.session["User_name"]
+            
+            results2={
+            "current_user_id":u_id,
+            "current_user":U_name
+            }
+            
+            results2_JSON=json.dumps(results2)
+            
             try:
                 if is_valid(goal_amount):
                     messages.success(request,'Goal added successfully')
@@ -229,13 +253,23 @@ def AddGoal(request):
                 save_goal.save()
                 messages.success(request,'Goal added successfully!!!')
                 print("sucess")
-                return render(request,'addGoal.html')
+                return render(request,'addGoal.html',{'dataval':results2_JSON})
             except ValueError as e:
                 print(e)
-                return render(request,'addGoal.html')
+                return render(request,'addGoal.html',{'dataval':results2_JSON})
 
     else :
-        return render(request,'addGoal.html')
+        u_id=request.session.get("User_id")
+            
+        U_name=request.session["User_name"]
+            
+        results2={
+        "current_user_id":u_id,
+        "current_user":U_name
+        }
+            
+        results2_JSON=json.dumps(results2)
+        return render(request,'addGoal.html',{'dataval':results2_JSON})
 
 def is_valid(goal_amount):
     amount_reason = amount_valid(goal_amount)
